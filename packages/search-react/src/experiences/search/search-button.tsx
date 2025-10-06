@@ -3,12 +3,17 @@ import { SearchIcon } from "./icons";
 
 interface SearchButtonProps {
   onClick: () => void;
+  darkMode?: boolean;
+  children?: React.ReactNode;
 }
 
-export const SearchButton: React.FC<SearchButtonProps> = ({ onClick }) => {
+export const SearchButton: React.FC<SearchButtonProps> = ({
+  onClick,
+  darkMode,
+}) => {
   return (
     <button
-      className="sitesearch-button"
+      className={`sitesearch-button${darkMode ? " dark" : ""}`}
       type="button"
       onClick={onClick}
       aria-label="Open search"

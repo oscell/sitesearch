@@ -8,9 +8,15 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  isDark?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  isDark,
+}) => {
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -32,9 +38,9 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className={`modal-backdrop${isDark ? " dark" : ""}`} onClick={onClose}>
       <div
-        className="modal-content ss-exp"
+        className={`modal-content ss-exp${isDark ? " dark" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

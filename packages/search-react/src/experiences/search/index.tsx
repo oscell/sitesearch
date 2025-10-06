@@ -16,6 +16,7 @@ import { useKeyboardNavigation } from "./useKeyboardNavigation";
 import "./styles.css";
 import { SearchButton } from "./search-button";
 import { Modal } from "./search-modal";
+import useEffectiveDarkMode from "./useEffectiveDarkMode";
 
 export interface SearchConfig {
   /** Algolia Application ID (required) */
@@ -34,6 +35,8 @@ export interface SearchConfig {
   buttonText?: string;
   /** Custom search button props (optional) */
   buttonProps?: React.ComponentProps<typeof SearchButton>;
+  /** Enable dark mode (optional) */
+  darkMode?: boolean;
 }
 
 interface SearchBoxProps {
@@ -265,6 +268,7 @@ const Footer = memo(function Footer() {
 export default function SearchExperience(config: SearchConfig) {
   const searchClient = algoliasearch(config.applicationId, config.apiKey);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isDark = useEffectiveDarkMode(config.darkMode);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -300,8 +304,10 @@ export default function SearchExperience(config: SearchConfig) {
 
   return (
     <>
-      <SearchButton {...buttonProps}>{config.buttonText}</SearchButton>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <SearchButton {...buttonProps} darkMode={isDark}>
+        {config.buttonText}
+      </SearchButton>
+      <Modal isOpen={isModalOpen} onClose={closeModal} isDark={isDark}>
         <InstantSearch
           searchClient={searchClient}
           indexName={config.indexName}

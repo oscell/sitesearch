@@ -1,12 +1,17 @@
 {
-  "setupTasks": [],
+  "setupTasks": [
+    {
+      "name": "Install dependencies",
+      "command": "bun install"
+    }
+  ],
   "tasks": {
     "Start": {
       "name": "Start",
       "command": "bun run dev",
       "runAtStart": true,
       "preview": {
-        "port": 3000
+        "port": 5173
       }
     }
   }
