@@ -8,7 +8,7 @@
   "tasks": {
     "Start": {
       "name": "Start",
-      "command": "bun run dev",
+      "command": "bun install && bun run build && bun run dev",
       "runAtStart": true,
       "preview": {
         "port": 5173
