@@ -17,24 +17,32 @@ The `Search` experience focuses on fast retrieval, instant feedback, and sensibl
 ## Usage
 
 ```tsx
-import { SearchWithAskAI } from '@algolia/sitesearch-react';
-import '@algolia/sitesearch-react/dist/sitesearch.css';
-
-<SearchWithAskAI
-  applicationId="YOUR_APP_ID"
-  apiKey="YOUR_SEARCH_API_KEY"
-  indexName="YOUR_INDEX_NAME"
-  placeholder="Search..."
-  hitsPerPage={6}
-  keyboardShortcut="cmd+k"
-  buttonText="Search"
-/>
+npx shadcn@latest add https://algolia-sitesearch.netlify.app/r/search.json
 ```
 
+This will add the `Search` experience to your project under `components/search`. Use it like this:
+
+```tsx
+import { default as Search } from "@/components/search";
+
+<Search
+  applicationId="betaHAXPMHIMMC"
+  apiKey="8b00405cba281a7d800ccec393e9af24"
+  indexName="algolia_podcast_sample_dataset"
+  placeholder="Search for podcasts..."
+  hitsPerPage={15}
+  keyboardShortcut="cmd+k"
+  buttonText="🎧 Search Podcasts"
+/>
+```
 
 
 ## Extending further
 
 - Integrate Algolia Recommend for related product below the hit list.
+- Change the styling to match your product's design.
+- Update `hit-list.tsx` to customize the hit rendering.
 - Add RefinementList, RangeSlider, ToggleRefinement, and other InstantSearch widgets to make it more powerful.
 - Add a `SearchEmpty` slot to highlight help center content or contact actions when no results surface.
+- Shape it to infinity with full support for `react-instantsearch`.
+- Open in v0 for AI edits.
