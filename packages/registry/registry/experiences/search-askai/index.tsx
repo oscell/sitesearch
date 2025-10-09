@@ -1,4 +1,4 @@
-import algoliasearch from "algoliasearch/lite";
+import { liteClient as algoliasearch } from "algoliasearch/lite";
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import {

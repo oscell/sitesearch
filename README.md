@@ -213,7 +213,7 @@ function CustomSearch() {
 {
   "@ai-sdk/react": "^2.0.4",
   "ai": "^5.0.30",
-  "algoliasearch": "4",
+  "algoliasearch": "5",
   "react-instantsearch": "7.16.2",
   "marked": "^16.3.0",
 }

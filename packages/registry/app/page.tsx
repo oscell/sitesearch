@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { OpenInV0Button } from "@/components/open-in-v0-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Search from "@/registry/experiences/search";
-// import { OpenInV0Button } from "@/components/open-in-v0-button";
 import SearchAskAI from "@/registry/experiences/search-askai";
 
 export default function Home() {
@@ -35,6 +35,7 @@ export default function Home() {
             <h2 className="text-sm text-muted-foreground sm:pl-3">
               Search with AskAI
             </h2>
+            <OpenInV0Button name="search-ai" className="w-fit" />
           </div>
           <div className="flex items-center justify-center min-h-[100px] md:min-h-[400px] relative">
             <SearchAskAI
@@ -49,6 +50,7 @@ export default function Home() {
         <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[100px] md:min-h-[450px] relative">
           <div className="flex items-center justify-between">
             <h2 className="text-sm text-muted-foreground sm:pl-3">Search</h2>
+            <OpenInV0Button name="search" className="w-fit" />
           </div>
           <div className="flex items-center justify-center min-h-[100px] md:min-h-[400px] relative">
             <Search
