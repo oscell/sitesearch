@@ -1,6 +1,4 @@
 import "@/app/global.css";
-import "@algolia/sidepanel-react/dist/sidepanel.css";
-import "@algolia/sitesearch-react/dist/sitesearch.css";
 import { RootProvider } from "fumadocs-ui/provider";
 import { Inter } from "next/font/google";
 
