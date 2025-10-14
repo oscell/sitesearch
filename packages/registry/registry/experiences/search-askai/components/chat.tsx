@@ -1,7 +1,6 @@
 import type { UIMessage } from "@ai-sdk/react";
 import type { UIDataTypes, UIMessagePart } from "ai";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { postFeedback } from "./askai";
 import {
   BrainIcon,
   CheckIcon,
@@ -9,8 +8,9 @@ import {
   DislikeIcon,
   LikeIcon,
   SearchIcon,
-} from "./icons";
-import { MemoizedMarkdown } from "./markdown";
+} from "@/registry/experiences/search-askai/components/icons";
+import { MemoizedMarkdown } from "@/registry/experiences/search-askai/components/markdown";
+import { postFeedback } from "@/registry/experiences/search-askai/hooks/askai";
 
 function useClipboard() {
   const copyText = useCallback(async (text: string) => {

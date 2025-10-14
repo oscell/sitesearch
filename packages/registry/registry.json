@@ -11,49 +11,45 @@
       "dependencies": ["algoliasearch@^5", "react-instantsearch@^7.16.2"],
       "files": [
         {
-          "path": "registry/experiences/search/index.tsx",
-          "type": "registry:file",
-          "target": "components/search/index.tsx"
+          "path": "registry/experiences/search/components/index.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search/hits-list.tsx",
-          "type": "registry:file",
-          "target": "components/search/hits-list.tsx"
+          "path": "registry/experiences/search/components/hits-list.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search/icons.tsx",
-          "type": "registry:file",
-          "target": "components/search/icons.tsx"
+          "path": "registry/experiences/search/components/icons.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search/search-button.tsx",
-          "type": "registry:file",
-          "target": "components/search/search-button.tsx"
+          "path": "registry/experiences/search/components/search-button.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search/search-modal.tsx",
-          "type": "registry:file",
-          "target": "components/search/search-modal.tsx"
+          "path": "registry/experiences/search/components/search-modal.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search/search-input.tsx",
-          "type": "registry:file",
-          "target": "components/search/search-input.tsx"
+          "path": "registry/experiences/search/components/search-input.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search/styles.css",
-          "type": "registry:file",
-          "target": "components/search/styles.css"
+          "path": "registry/experiences/search/components/styles.css",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search/useKeyboardNavigation.ts",
-          "type": "registry:hook",
-          "target": "components/search/useKeyboardNavigation.ts"
+          "path": "registry/experiences/search/hooks/useKeyboardNavigation.ts",
+          "type": "registry:hook"
         },
         {
-          "path": "registry/experiences/search/useEffectiveDarkMode.ts",
-          "type": "registry:hook",
-          "target": "components/search/useEffectiveDarkMode.ts"
+          "path": "registry/experiences/search/hooks/useEffectiveDarkMode.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "registry/experiences/search/page.tsx",
+          "type": "registry:page",
+          "target": "app/search/page.tsx"
         }
       ]
     },
@@ -71,69 +67,61 @@
       ],
       "files": [
         {
-          "path": "registry/experiences/search-askai/index.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/index.tsx"
+          "path": "registry/experiences/search-askai/components/index.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/chat.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/chat.tsx"
+          "path": "registry/experiences/search-askai/components/chat.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/hits-list.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/hits-list.tsx"
+          "path": "registry/experiences/search-askai/components/hits-list.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/markdown.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/markdown.tsx"
+          "path": "registry/experiences/search-askai/components/markdown.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/icons.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/icons.tsx"
+          "path": "registry/experiences/search-askai/components/icons.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/search-button.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/search-button.tsx"
+          "path": "registry/experiences/search-askai/components/search-button.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/search-modal.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/search-modal.tsx"
+          "path": "registry/experiences/search-askai/components/search-modal.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/search-input.tsx",
-          "type": "registry:file",
-          "target": "components/search-ai/search-input.tsx"
+          "path": "registry/experiences/search-askai/components/search-input.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/styles.css",
-          "type": "registry:file",
-          "target": "components/search-ai/styles.css"
+          "path": "registry/experiences/search-askai/components/styles.css",
+          "type": "registry:component"
         },
         {
-          "path": "registry/experiences/search-askai/useKeyboardNavigation.ts",
-          "type": "registry:hook",
-          "target": "components/search-ai/useKeyboardNavigation.ts"
+          "path": "registry/experiences/search-askai/hooks/useKeyboardNavigation.ts",
+          "type": "registry:hook"
         },
         {
-          "path": "registry/experiences/search-askai/useEffectiveDarkMode.ts",
-          "type": "registry:hook",
-          "target": "components/search-ai/useEffectiveDarkMode.ts"
+          "path": "registry/experiences/search-askai/hooks/useEffectiveDarkMode.ts",
+          "type": "registry:hook"
         },
         {
-          "path": "registry/experiences/search-askai/useSearchState.ts",
-          "type": "registry:hook",
-          "target": "components/search-ai/useSearchState.ts"
+          "path": "registry/experiences/search-askai/hooks/useSearchState.ts",
+          "type": "registry:hook"
         },
         {
-          "path": "registry/experiences/search-askai/askai.ts",
-          "type": "registry:hook",
-          "target": "components/search-ai/askai.ts"
+          "path": "registry/experiences/search-askai/hooks/askai.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "registry/experiences/search-askai/page.tsx",
+          "type": "registry:page",
+          "target": "app/search-ai/page.tsx"
         }
       ]
     }

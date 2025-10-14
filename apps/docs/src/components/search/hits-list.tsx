@@ -1,3 +1,7 @@
+/** biome-ignore-all lint/a11y/useSemanticElements: hand crafted interactions */
+/** biome-ignore-all lint/suspicious/noExplicitAny: too ambiguous */
+/** biome-ignore-all lint/a11y/useSemanticElements: hand crafted interactions */
+
 import { memo, useState } from "react";
 import { Highlight } from "react-instantsearch";
 import { SearchIcon } from "./icons";

@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /** biome-ignore-all lint/a11y/useFocusableInteractive: hand crafted interactions */
+/** biome-ignore-all lint/suspicious/noExplicitAny: too ambiguous */
 /** biome-ignore-all lint/a11y/useSemanticElements: . */
 /** biome-ignore-all lint/a11y/useSemanticElements: hand crafted interactions */
 
 import { memo, useState } from "react";
 import { Highlight } from "react-instantsearch";
-import { SearchIcon } from "./icons";
+import { SearchIcon } from "@/registry/experiences/search/components/icons";
 
 interface HitsListProps {
   hits: any[];

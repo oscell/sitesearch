@@ -5,7 +5,7 @@ import { PreviewSearchNoAskAI, PreviewSiteSearch } from "@/components/previews";
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
-    ...defaultMdxComponents,
+    ...(defaultMdxComponents as MDXComponents),
     PreviewSiteSearch,
     PreviewSearchNoAskAI,
     ...components,

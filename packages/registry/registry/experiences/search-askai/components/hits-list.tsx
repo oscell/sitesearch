@@ -4,7 +4,7 @@
 
 import { memo } from "react";
 import { Highlight } from "react-instantsearch";
-import { SparklesIcon } from "./icons";
+import { SparklesIcon } from "@/registry/experiences/search-askai/components/icons";
 
 interface HitsActionsProps {
   query: string;
@@ -30,7 +30,8 @@ const HitsActions = memo(function HitsActions({
       >
         <SparklesIcon />
         <p className="ss-infinite-hits-item-title">
-          Ask AI: <span className="ais-Highlight-highlighted">"{query}"</span>
+          Ask AI:{" "}
+          <span className="ais-Highlight-highlighted">&quot;{query}&quot;</span>
         </p>
       </article>
     </div>

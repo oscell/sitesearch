@@ -3,8 +3,8 @@
 
 import { OpenInV0Button } from "@/components/open-in-v0-button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import Search from "@/registry/experiences/search";
-import SearchAskAI from "@/registry/experiences/search-askai";
+import Search from "@/registry/experiences/search/components";
+import SearchAskAI from "@/registry/experiences/search-askai/components";
 
 export default function Home() {
   return (

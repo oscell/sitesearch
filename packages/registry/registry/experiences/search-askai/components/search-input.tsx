@@ -1,17 +1,59 @@
 import type React from "react";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useInstantSearch, useSearchBox } from "react-instantsearch";
-import { CloseIcon, SearchIcon } from "./icons";
+import {
+  ArrowLeftIcon,
+  CloseIcon,
+  SearchIcon,
+} from "@/registry/experiences/search-askai/components/icons";
 
 export interface SearchInputProps {
   placeholder?: string;
   className?: string;
+  showChat: boolean;
+  isGenerating?: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
   onClose: () => void;
+  setShowChat: (show: boolean) => void;
   onArrowDown?: () => void;
-  onEnter?: () => void;
   onArrowUp?: () => void;
+  onEnter?: (value: string) => boolean;
 }
+
+const SearchLeftButton = memo(function SearchLeftButton({
+  showChat,
+  setShowChat,
+}: {
+  showChat: boolean;
+  setShowChat: (show: boolean) => void;
+}) {
+  if (showChat) {
+    return (
+      <button
+        type="button"
+        onClick={() => setShowChat(false)}
+        className="ss-search-left-button"
+        aria-label="Back to search"
+        title="Back to search"
+      >
+        <ArrowLeftIcon />
+      </button>
+    );
+  }
+
+  return (
+    <div
+      // biome-ignore lint/a11y/useSemanticElements: hand crafted
+      role="button"
+      tabIndex={-1}
+      className="ss-search-left-button"
+      aria-label="Search"
+      title="Search"
+    >
+      <SearchIcon />
+    </div>
+  );
+});
 
 export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
   const { status } = useInstantSearch();
@@ -22,10 +64,27 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
 
   function setQuery(newQuery: string) {
     setInputValue(newQuery);
-    refine(newQuery);
+    if (!props.showChat) {
+      refine(newQuery);
+    }
   }
 
-  const placeholder = props.placeholder;
+  // Clear the input when entering chat mode
+  useEffect(() => {
+    if (props.showChat) {
+      setInputValue("");
+    }
+  }, [props.showChat]);
+
+  // Placeholder logic:
+  // - if generating, show "Answering..."
+  // - else if showChat, show AI prompt placeholder
+  // - else show provided placeholder
+  const placeholder = props.isGenerating
+    ? "Answering..."
+    : props.showChat
+      ? "Ask AI anything about Algolia"
+      : props.placeholder;
 
   return (
     <search
@@ -44,16 +103,10 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         }
       }}
     >
-      <div
-        // biome-ignore lint/a11y/useSemanticElements: hand crafted
-        role="button"
-        tabIndex={-1}
-        className="ss-search-left-button"
-        aria-label="Search"
-        title="Search"
-      >
-        <SearchIcon />
-      </div>
+      <SearchLeftButton
+        showChat={props.showChat}
+        setShowChat={props.setShowChat}
+      />
       <input
         ref={props.inputRef}
         autoComplete="off"
@@ -64,10 +117,16 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         maxLength={512}
         type="search"
         value={inputValue}
+        disabled={props.isGenerating}
         onChange={(event) => {
           setQuery(event.currentTarget.value);
         }}
         onKeyDown={(e) => {
+          if (props.isGenerating) {
+            // while answering, block interactions
+            e.preventDefault();
+            return;
+          }
           if (e.key === "ArrowDown") {
             e.preventDefault();
             props.onArrowDown?.();
@@ -80,7 +139,16 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
           }
           if (e.key === "Enter") {
             e.preventDefault();
-            props.onEnter?.();
+            if (props.onEnter?.(inputValue)) {
+              // If handled by parent (e.g., send in chat), clear the input
+              setQuery("");
+              return;
+            }
+            const trimmed = inputValue.trim();
+            if (trimmed) {
+              // Open chat; parent will send the query
+              props.setShowChat(true);
+            }
           }
         }}
         // biome-ignore lint/a11y/noAutofocus: expected

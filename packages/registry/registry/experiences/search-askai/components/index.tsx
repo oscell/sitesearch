@@ -8,23 +8,35 @@ import {
   useInstantSearch,
   useSearchBox,
 } from "react-instantsearch";
-import { HitsList } from "./hits-list";
-import { AlgoliaLogo, SearchIcon } from "./icons";
-import { SearchInput } from "./search-input";
-import { useKeyboardNavigation } from "./useKeyboardNavigation";
+import {
+  ChatWidget,
+  type Message,
+} from "@/registry/experiences/search-askai/components/chat";
+import { HitsList } from "@/registry/experiences/search-askai/components/hits-list";
+import {
+  AlgoliaLogo,
+  SearchIcon,
+} from "@/registry/experiences/search-askai/components/icons";
+import { SearchInput } from "@/registry/experiences/search-askai/components/search-input";
+import { useAskai } from "@/registry/experiences/search-askai/hooks/askai";
+import { useKeyboardNavigation } from "@/registry/experiences/search-askai/hooks/useKeyboardNavigation";
+import { useSearchState } from "@/registry/experiences/search-askai/hooks/useSearchState";
+import "@/registry/experiences/search-askai/components/styles.css";
+import { SearchButton } from "@/registry/experiences/search-askai/components/search-button";
+import { Modal } from "@/registry/experiences/search-askai/components/search-modal";
+import { useEffectiveDarkMode } from "@/registry/experiences/search-askai/hooks/useEffectiveDarkMode";
 
-import "./styles.css";
-import { SearchButton } from "./search-button";
-import { Modal } from "./search-modal";
-import useEffectiveDarkMode from "./useEffectiveDarkMode";
-
-export interface SearchConfig {
+export interface SearchWithAskAIConfig {
   /** Algolia Application ID (required) */
   applicationId: string;
   /** Algolia API Key (required) */
   apiKey: string;
   /** Algolia Index Name (required) */
   indexName: string;
+  /** AI Assistant ID (required for chat functionality) */
+  assistantId: string;
+  /** Base URL for AI chat API (optional, defaults to beta endpoint) */
+  baseAskaiUrl?: string;
   /** Placeholder text for search input (optional, defaults to "What are you looking for?") */
   placeholder?: string;
   /** Number of hits per page (optional, defaults to 8) */
@@ -43,12 +55,15 @@ interface SearchBoxProps {
   query?: string;
   className?: string;
   placeholder?: string;
+  showChat: boolean;
+  isGenerating?: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
   refine: (query: string) => void;
+  setShowChat: (show: boolean) => void;
   onClose?: () => void;
   onArrowDown?: () => void;
   onArrowUp?: () => void;
-  onEnter?: () => void;
+  onEnter?: (value: string) => boolean;
 }
 
 const SearchBox = memo(function SearchBox(props: SearchBoxProps) {
@@ -56,33 +71,56 @@ const SearchBox = memo(function SearchBox(props: SearchBoxProps) {
     <SearchInput
       className={props.className}
       placeholder={props.placeholder}
+      showChat={props.showChat}
+      isGenerating={props.isGenerating}
       inputRef={props.inputRef}
+      setShowChat={props.setShowChat}
       onClose={props.onClose || (() => {})}
-      onEnter={props.onEnter}
       onArrowDown={props.onArrowDown}
       onArrowUp={props.onArrowUp}
+      onEnter={props.onEnter}
     />
   );
 });
 
 interface NoResultsProps {
   query: string;
+  onAskAI: () => void;
   onClear: () => void;
 }
 
-const NoResults = memo(function NoResults({ query, onClear }: NoResultsProps) {
+const NoResults = memo(function NoResults({
+  query,
+  onAskAI,
+  onClear,
+}: NoResultsProps) {
   return (
     <div className="ss-no-results">
       <div className="ss-no-results-icon">
         <SearchIcon />
       </div>
-      <p className="ss-no-results-title">No results for "{query}"</p>
+      <p className="ss-no-results-title">No results for &quot;{query}&quot;</p>
       <p className="ss-no-results-subtitle">
         Try a different query or ask AI to help.
       </p>
       <div className="ss-no-results-actions">
+        <button type="button" className="ss-no-results-btn" onClick={onAskAI}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+          >
+            <title>Ask AI</title>
+            <path
+              fill="currentColor"
+              d="m6.8 13l2.9 2.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.213-.325T3.426 12t.063-.375t.212-.325l4.6-4.6q.275-.275.7-.275t.7.275t.275.7t-.275.7L6.8 11H19V8q0-.425.288-.712T20 7t.713.288T21 8v3q0 .825-.587 1.413T19 13z"
+            />
+          </svg>
+          Ask AI
+        </button>
         <button type="button" className="ss-no-results-btn" onClick={onClear}>
-          Clear query
+          Clear
         </button>
       </div>
     </div>
@@ -90,22 +128,38 @@ const NoResults = memo(function NoResults({ query, onClear }: NoResultsProps) {
 });
 
 interface ResultsPanelProps {
+  showChat: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
+  setShowChat: (showChat: boolean) => void;
   query: string;
   selectedIndex: number;
   refine: (query: string) => void;
-  config: SearchConfig;
+  config: SearchWithAskAIConfig;
+  messages: unknown[];
+  error: Error | null;
+  isGenerating: boolean;
+  sendMessage: (options: { text: string }) => void | Promise<void>;
 }
 
 const ResultsPanel = memo(function ResultsPanel({
+  showChat,
+  inputRef,
+  setShowChat,
   query,
   selectedIndex,
+  refine,
+  config,
+  messages,
+  error,
+  isGenerating,
+  sendMessage,
 }: ResultsPanelProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
+    if (showChat) return;
     const container = containerRef.current;
     if (!container) return;
     const selectedEl = container.querySelector(
@@ -122,7 +176,34 @@ const ResultsPanel = memo(function ResultsPanel({
     } else if (iRect.bottom > cRect.bottom - padding) {
       container.scrollTop += iRect.bottom - (cRect.bottom - padding);
     }
-  }, [selectedIndex, items.length]);
+  }, [selectedIndex, showChat, items.length]);
+
+  const lastSentRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!showChat) return;
+    const trimmed = (query ?? "").trim();
+    if (!trimmed) return;
+    if (lastSentRef.current === trimmed) return;
+    refine("");
+    if (inputRef.current) {
+      inputRef.current.value = "";
+      inputRef.current.focus();
+    }
+    sendMessage({ text: trimmed });
+    lastSentRef.current = trimmed;
+  }, [showChat, query, inputRef, sendMessage, refine]);
+
+  if (showChat) {
+    return (
+      <ChatWidget
+        messages={messages as unknown as Message[]}
+        error={error as Error | null}
+        isGenerating={isGenerating}
+        applicationId={config.applicationId}
+        assistantId={config.assistantId}
+      />
+    );
+  }
 
   return (
     <>
@@ -132,6 +213,7 @@ const ResultsPanel = memo(function ResultsPanel({
           hits={items as unknown[]}
           query={query}
           selectedIndex={selectedIndex}
+          onAskAI={() => setShowChat(true)}
         />
       </div>
     </>
@@ -140,7 +222,7 @@ const ResultsPanel = memo(function ResultsPanel({
 
 interface SearchModalProps {
   onClose?: () => void;
-  config: SearchConfig;
+  config: SearchWithAskAIConfig;
 }
 
 export function SearchModal({ onClose, config }: SearchModalProps) {
@@ -149,19 +231,32 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
 
   const results = useInstantSearch();
   const { items } = useHits();
+  const { showChat, setShowChat, handleShowChat } = useSearchState();
+
+  // Lift chat state here to thread isGenerating to the SearchInput
+  const { messages, error, isGenerating, sendMessage } = useAskai({
+    applicationId: config.applicationId,
+    apiKey: config.apiKey,
+    indexName: config.indexName,
+    assistantId: config.assistantId,
+    baseAskaiUrl: config.baseAskaiUrl,
+  });
 
   const noResults = results.results?.nbHits === 0;
   const { selectedIndex, moveDown, moveUp, activateSelection } =
-    useKeyboardNavigation(items, query);
+    useKeyboardNavigation(showChat, items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
     if (activateSelection()) {
+      if (selectedIndex === 0) {
+        handleShowChat(true);
+      }
       return true;
     }
     return false;
-  }, [activateSelection]);
+  }, [activateSelection, selectedIndex, handleShowChat]);
 
-  const showResultsPanel = !noResults && !!query;
+  const showResultsPanel = (!noResults && !!query) || showChat;
 
   return (
     <>
@@ -172,31 +267,56 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
           placeholder={config.placeholder || "What are you looking for?"}
           className="ss-searchbox-form"
           refine={refine}
+          showChat={showChat}
+          isGenerating={isGenerating}
+          setShowChat={setShowChat}
           onClose={onClose}
           onArrowDown={moveDown}
           onArrowUp={moveUp}
+          onEnter={(value) => {
+            const trimmed = (value ?? "").trim();
+            if (showChat && trimmed) {
+              // Trigger send via ResultsPanel effect
+              refine(trimmed);
+              return true;
+            }
+            return handleActivateSelection();
+          }}
           inputRef={inputRef}
-          onEnter={handleActivateSelection}
         />
         {showResultsPanel && (
           <ResultsPanel
+            showChat={showChat}
             inputRef={inputRef}
+            setShowChat={(v) => {
+              setShowChat(v);
+            }}
             query={query}
             selectedIndex={selectedIndex}
             refine={refine}
             config={config}
+            messages={messages as unknown[]}
+            error={error as Error | null}
+            isGenerating={isGenerating}
+            sendMessage={sendMessage}
           />
         )}
-        {noResults && query && (
-          <NoResults query={query} onClear={() => refine("")} />
+        {noResults && query && !showChat && (
+          <NoResults
+            query={query}
+            onAskAI={() => {
+              setShowChat(true);
+            }}
+            onClear={() => refine("")}
+          />
         )}
       </div>
-      <Footer />
+      <Footer showChat={showChat} />
     </>
   );
 }
 
-const Footer = memo(function Footer() {
+const Footer = memo(function Footer({ showChat }: { showChat: boolean }) {
   return (
     <div className="ss-footer">
       <div className="ss-footer-left">
@@ -214,7 +334,7 @@ const Footer = memo(function Footer() {
               />
             </svg>
           </kbd>
-          <span>Open</span>
+          <span>{showChat ? "Ask question" : "Open"}</span>
         </div>
 
         <div className="ss-footer-kbd-group">
@@ -265,10 +385,9 @@ const Footer = memo(function Footer() {
   );
 });
 
-export default function SearchExperience(config: SearchConfig) {
+export default function SearchExperience(config: SearchWithAskAIConfig) {
   const searchClient = algoliasearch(config.applicationId, config.apiKey);
   searchClient.addAlgoliaAgent("algolia-sitesearch");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isDark = useEffectiveDarkMode(config.darkMode);
 

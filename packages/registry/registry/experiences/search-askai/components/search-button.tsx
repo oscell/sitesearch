@@ -1,5 +1,5 @@
 import type React from "react";
-import { SearchIcon } from "./icons";
+import { SearchIcon } from "@/registry/experiences/search-askai/components/icons";
 
 interface SearchButtonProps {
   onClick: () => void;

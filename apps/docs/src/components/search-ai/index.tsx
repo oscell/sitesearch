@@ -8,18 +8,24 @@ import {
   useInstantSearch,
   useSearchBox,
 } from "react-instantsearch";
-import { useAskai } from "./askai";
-import { ChatWidget, type Message } from "./chat";
-import { HitsList } from "./hits-list";
-import { AlgoliaLogo, SearchIcon } from "./icons";
-import { SearchInput } from "./search-input";
-import { useKeyboardNavigation } from "./useKeyboardNavigation";
-import { useSearchState } from "./useSearchState";
+import {
+  ChatWidget,
+  type Message,
+} from "@/registry/experiences/search-askai/components/chat";
+import { HitsList } from "@/registry/experiences/search-askai/components/hits-list";
+import {
+  AlgoliaLogo,
+  SearchIcon,
+} from "@/registry/experiences/search-askai/components/icons";
+import { SearchInput } from "@/registry/experiences/search-askai/components/search-input";
+import { useAskai } from "@/registry/experiences/search-askai/hooks/askai";
+import { useKeyboardNavigation } from "@/registry/experiences/search-askai/hooks/useKeyboardNavigation";
+import { useSearchState } from "@/registry/experiences/search-askai/hooks/useSearchState";
 
-import "./styles.css";
-import { SearchButton } from "./search-button";
-import { Modal } from "./search-modal";
-import useEffectiveDarkMode from "./useEffectiveDarkMode";
+import "@/registry/experiences/search-askai/components/styles.css";
+import { SearchButton } from "@/registry/experiences/search-askai/components/search-button";
+import { Modal } from "@/registry/experiences/search-askai/components/search-modal";
+import useEffectiveDarkMode from "@/registry/experiences/search-askai/hooks/useEffectiveDarkMode";
 
 export interface SearchWithAskAIConfig {
   /** Algolia Application ID (required) */

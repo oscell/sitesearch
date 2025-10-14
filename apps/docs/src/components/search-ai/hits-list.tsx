@@ -1,3 +1,7 @@
+/** biome-ignore-all lint/a11y/useFocusableInteractive: hand crafted interactions */
+/** biome-ignore-all lint/a11y/noNoninteractiveElementToInteractiveRole: hand crafted interactions */
+/** biome-ignore-all lint/a11y/useSemanticElements: hand crafted interactions */
+
 import { memo } from "react";
 import { Highlight } from "react-instantsearch";
 import { SparklesIcon } from "./icons";
@@ -20,7 +24,6 @@ const HitsActions = memo(function HitsActions({
         className="ss-infinite-hits-item ss-ask-ai-btn"
         aria-label="Ask AI"
         title="Ask AI"
-        // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: hand crafted
         role="option"
         aria-selected={isSelected}
       >
