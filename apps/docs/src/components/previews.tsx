@@ -13,7 +13,7 @@ export function PreviewSiteSearch() {
       <div className="flex justify-between items-center mb-2 ">
         <div>
           <CopyCodeButton
-            code={`npx shadcn@latest add https://sitesearch.algolia.com/r/search-ai.json`}
+            code={`npx shadcn@latest add @algolia/search-ai`}
             title="Copy install command"
           ></CopyCodeButton>
         </div>
@@ -53,7 +53,7 @@ export function PreviewSearchNoAskAI() {
       <div className="flex justify-between items-center mb-2 ">
         <div>
           <CopyCodeButton
-            code={`npx shadcn@latest add https://sitesearch.algolia.com/r/search.json`}
+            code={`npx shadcn@latest @add @algolia/search`}
             title="Copy install command"
           ></CopyCodeButton>
         </div>

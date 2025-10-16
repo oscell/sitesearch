@@ -31,11 +31,11 @@ export default function HomePage() {
               <WordRotate
                 className="text-[#003dff] dark:text-indigo-400"
                 words={[
-                  "AI-Native",
                   "Modern",
                   "Lightning-fast",
                   "Production-ready",
                   "Beautiful",
+                  "AI-Native",
                   "Customizable",
                   "Developer-first",
                   "Enterprise-grade",
