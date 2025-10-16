@@ -544,7 +544,7 @@ const Footer = memo(function Footer() {
           target="_blank"
           rel="noopener quicksearch"
         >
-          <span>Powered by</span>
+          <span className="md:block hidden">Powered by</span>
           <AlgoliaLogo />
         </a>
       </div>
