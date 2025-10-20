@@ -31,14 +31,10 @@ SiteSearch provides production-ready search components that combine Algolia's li
 Install sitesearch components from our public repository
 
 ```bash
-npx shadcn@latest add https://sitesearch.algolia.com/r/search.json
+npx shadcn@latest add @algolia/search
 ```
 
-or
-
-```bash
-npx shadcn@latest add https://sitesearch.algolia.com/r/search-ai.json
-```
+[Find other components](https://sitesearch.algolia.com/docs/experiences/search)
 
 ### Manual
 
