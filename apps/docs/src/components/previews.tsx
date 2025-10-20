@@ -58,7 +58,7 @@ export function PreviewSearchNoAskAI() {
           ></CopyCodeButton>
         </div>
         <div>
-          <OpenInV0Button name="search-ai"></OpenInV0Button>
+          <OpenInV0Button name="search"></OpenInV0Button>
         </div>
       </div>
       <div className="bg-background relative flex h-[400px] items-center justify-center overflow-hidden rounded-lg border p-20">
