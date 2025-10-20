@@ -112,7 +112,7 @@ pnpm build:js-bundle
 ## Contributing
 
 1. Fork the repository
-2. Add your component to `package/registry/registry/experiences/`
+2. Add your component to `apps/docs/src/registry/experiences`
 3. Submit a PR
 
 ## License
