@@ -1,6 +1,7 @@
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
 import { defineConfig } from "rolldown";
+import { dts } from "rolldown-plugin-dts";
 import postcss from "rollup-plugin-postcss";
 
 const common = {
@@ -13,6 +14,8 @@ const common = {
       "react/jsx-runtime": "preact/jsx-runtime",
     },
   },
+  inlineDynamicImports: true,
+  treeshake: { moduleSideEffects: false },
 };
 
 export default defineConfig([
@@ -29,8 +32,6 @@ export default defineConfig([
     plugins: [
       postcss({
         extract: "search.min.css",
-        sourceMap: true,
-        plugins: [autoprefixer(), cssnano()],
       }),
     ],
     treeshake: true,
@@ -49,11 +50,15 @@ export default defineConfig([
     plugins: [
       postcss({
         extract: "search-askai.min.css",
-        sourceMap: true,
-        plugins: [autoprefixer(), cssnano()],
       }),
     ],
     treeshake: true,
     ...common,
+  },
+  {
+    input: "src/index.ts",
+    output: { dir: "dist", format: "es" },
+    plugins: [dts()],
+    treeshake: true,
   },
 ]);
