@@ -16,10 +16,10 @@ Add CSS + JS from unpkg, then initialize.
 
 ```html
 <!-- CSS -->
-<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@1/dist/search.min.css" />
 
 <!-- JS (UMD exposes window.SiteSearch) -->
-<script src="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.js"></script>
+<script src="https://unpkg.com/@algolia/sitesearch@1/dist/search.min.js"></script>
 
 <div id="search-root"></div>
 
@@ -42,61 +42,6 @@ Add CSS + JS from unpkg, then initialize.
     }
   });
 </script>
-```
-
-## Other search experiences
-
-### Ask AI
-
-Include the Ask AI bundle and initialize with an `assistantId`.
-
-```html
-<!-- CSS + JS for Ask AI -->
-<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@1.0.0/dist/search-askai.min.css" />
-<script src="https://unpkg.com/@algolia/sitesearch@1.0.0/dist/search-askai.min.js"></script>
-
-<div id="search-root"></div>
-
-<script>
-  window.SiteSearchAskAI.init({
-    container: '#search-root',
-    applicationId: 'ALGOLIA_APP_ID',
-    apiKey: 'ALGOLIA_SEARCH_API_KEY',
-    indexName: 'YOUR_INDEX_NAME',
-    assistantId: 'YOUR_ASSISTANT_ID',
-    // optional: baseAskaiUrl: 'https://askai.algolia.com'
-    placeholder: 'Search or ask AI…',
-    hitsPerPage: 8,
-    keyboardShortcut: 'cmd+k',
-    darkMode: undefined,
-    attributes: {
-      primaryText: 'title',
-      secondaryText: 'description'
-    }
-  });
-</script>
-```
-
-### SearchConfig
-
-```ts
-type SearchConfig = {
-  applicationId: string;
-  apiKey: string;
-  indexName: string;
-  placeholder?: string;
-  hitsPerPage?: number; // default 8
-  keyboardShortcut?: string; // default 'cmd+k'
-  buttonText?: string; // optional button label
-  buttonProps?: Record<string, unknown>; // forwarded to the trigger button
-  darkMode?: boolean; // true/false or omit for auto based on .dark or OS
-  attributes?: {
-    primaryText: string; // e.g. 'title' or 'content.title'
-    secondaryText?: string; // e.g. 'description'
-    tertiaryText?: string;
-    image?: string; // URL attribute for a thumbnail
-  };
-};
 ```
 
 ## Theming
