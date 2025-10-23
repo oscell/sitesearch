@@ -32,10 +32,10 @@ Leverage [Algolia Ask AI](https://www.algolia.com/products/ai/ask-ai)'s context 
   <TabsContents>
     <TabsContent value="shadcn">
 ```tsx
-npx shadcn@latest add @algolia/search-ai
+npx shadcn@latest add @algolia/highlight-to-askai
 ```
 
-This will add the `Search with AskAI` experience to your project under `components/search-ai`. Use it like this:
+This will add the `Highlight to AskAI` experience to your project under `components/highlight-to-askai`. Use it like this:
 
 ```tsx
 import HighlightToAskAi from "@/components/highlight-to-askai";
@@ -44,7 +44,7 @@ import HighlightToAskAi from "@/components/highlight-to-askai";
   applicationId="betaHAXPMHIMMC"
   apiKey="8b00405cba281a7d800ccec393e9af24"
   indexName="algolia_podcast_sample_dataset"
-  assistantId="Y89iGlsnihaU"
+  assistantId="rO3NctSlNXEx"
   excludeElements={["pre", "code"]}
   askButtonLabel="Ask AI?"
   onAsk={(payload) => {
@@ -60,7 +60,7 @@ import HighlightToAskAi from "@/components/highlight-to-askai";
 
 ### Configuration
 
-Prerequisites for using the `SearchWithAskAi` component:
+Prerequisites for using the `HighlightToAskAi` component:
 
 - `applicationId`: The Algolia application ID
 - `apiKey`: The Algolia API key
