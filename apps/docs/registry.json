@@ -91,6 +91,36 @@
         }
       ],
       "categories": ["search", "ai"]
+    },
+    {
+      "name": "highlight-to-askai",
+      "type": "registry:block",
+      "title": "Highlight to Ask AI [Experimental]",
+      "description": "🚧 [Experimental] Highlight any text and ask Algolia Ask AI with an inline tooltip",
+      "registryDependencies": ["button", "input"],
+      "dependencies": [
+        "@floating-ui/react",
+        "@ai-sdk/react@^2.0.4",
+        "ai@^5.0.30",
+        "lucide-react",
+        "marked"
+      ],
+      "files": [
+        {
+          "path": "src/registry/experiences/highlight-to-askai/components/highlight-to-askai.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/experiences/highlight-to-askai/hooks/use-askai.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "src/registry/experiences/highlight-to-askai/page.tsx",
+          "type": "registry:page",
+          "target": "app/highlight-to-askai/page.tsx"
+        }
+      ],
+      "categories": ["ai"]
     }
   ]
 }

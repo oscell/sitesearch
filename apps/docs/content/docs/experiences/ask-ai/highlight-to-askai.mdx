@@ -1,0 +1,97 @@
+---
+title: Highlight to Ask AI 🚧
+description: "🚧 [Experimental] Highlight anything on the page and ask your Algolia Ask AI about it."
+---
+
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { Tabs, TabsList, TabsTrigger, TabsContent, TabsContents } from '@/components/animate-ui/components/animate/tabs';
+import { LogosShadcn } from '@/components/icons/shadcn';
+import { LogosJavascript } from '@/components/icons/javascript';
+import { HighlightAskAI } from '@/registry/experiences/highlight-to-askai/components/highlight-to-askai';
+import { PreviewHighlightToAskAI } from '@/components/previews';
+
+Leverage [Algolia Ask AI](https://www.algolia.com/products/ai/ask-ai)'s context to answer questions about any highlighted text on your page.
+
+## Use cases
+
+- Documentation websites
+- Interactive blog posts & tutorials
+
+## Preview
+
+<PreviewHighlightToAskAI />
+
+
+<Tabs>
+  <div className="flex items-center justify-between gap-2 mt-20 mb-2">
+    <h2 className="!my-0 mr-4">Usage</h2>
+    <TabsList className="flex items-center gap-2">
+      <TabsTrigger value="shadcn" className="flex items-center gap-2 px-2"> <LogosShadcn /> <span>shadcn/ui</span></TabsTrigger>
+    </TabsList>
+  </div>
+  <TabsContents>
+    <TabsContent value="shadcn">
+```tsx
+npx shadcn@latest add @algolia/search-ai
+```
+
+This will add the `Search with AskAI` experience to your project under `components/search-ai`. Use it like this:
+
+```tsx
+import HighlightToAskAi from "@/components/highlight-to-askai";
+
+<HighlightToAskAi 
+  applicationId="betaHAXPMHIMMC"
+  apiKey="8b00405cba281a7d800ccec393e9af24"
+  indexName="algolia_podcast_sample_dataset"
+  assistantId="Y89iGlsnihaU"
+  excludeElements={["pre", "code"]}
+  askButtonLabel="Ask AI?"
+  onAsk={(payload) => {
+    console.log(payload);
+  }}
+>
+  <article>
+    <h1>My Article</h1>
+    <p>This is my article content.</p>
+  </article>
+</HighlightToAskAi>
+```
+
+### Configuration
+
+Prerequisites for using the `SearchWithAskAi` component:
+
+- `applicationId`: The Algolia application ID
+- `apiKey`: The Algolia API key
+- `indexName`: The Algolia index name
+- `assistantId`: The Ask AI assistant ID
+
+Optional props:
+- `excludeElements`: An array of HTML elements to exclude from the highlighted text.
+- `askButtonLabel`: The label for the ask button.
+- `onAsk`: A callback function that will be called when the ask button is clicked.
+
+
+### Structure
+
+<Files>
+  <Folder name="app">
+    <File name="page.tsx" />
+  </Folder>
+  <Folder name="components" defaultOpen>
+    <File name="highlight-to-askai.tsx" />
+  </Folder>
+  <Folder name="hooks" defaultOpen>
+    <File name="use-askai.tsx" />
+  </Folder>
+  <File name="package.json" />
+</Files>
+    </TabsContent>
+  </TabsContents>
+</Tabs>
+
+## Extending further
+
+- Change the styling to match your brand
+- Open in v0 for more customization
