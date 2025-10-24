@@ -36,7 +36,7 @@ export function PreviewSiteSearch() {
           applicationId="betaHAXPMHIMMC"
           apiKey="8b00405cba281a7d800ccec393e9af24"
           indexName="algolia_podcast_sample_dataset"
-          assistantId="rO3NctSlNXEx"
+          assistantId="Y89iGlsnihaU"
           placeholder="Search for podcasts..."
           baseAskaiUrl="https://beta-askai.algolia.com"
           hitsPerPage={6}
@@ -125,7 +125,7 @@ export function PreviewHighlightToAskAI() {
             applicationId="betaHAXPMHIMMC"
             apiKey="8b00405cba281a7d800ccec393e9af24"
             indexName="algolia_podcast_sample_dataset"
-            assistantId="rO3NctSlNXEx"
+            assistantId="Y89iGlsnihaU"
             askAiBaseUrl="https://beta-askai.algolia.com"
             side="top"
             sideOffset={8}

@@ -11,7 +11,7 @@ export default function Page() {
           applicationId="betaHAXPMHIMMC"
           apiKey="8b00405cba281a7d800ccec393e9af24"
           indexName="algolia_podcast_sample_dataset"
-          assistantId="rO3NctSlNXEx"
+          assistantId="Y89iGlsnihaU"
           askAiBaseUrl="https://beta-askai.algolia.com"
           side="top"
           sideOffset={8}
