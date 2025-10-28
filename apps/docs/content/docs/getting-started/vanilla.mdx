@@ -5,29 +5,34 @@ description: "Using SiteSearch with Vanilla JS"
 
 We provide a vanilla version of the search experiences that can be used in any project.
 
-Start with our [CodeSandbox](https://codesandbox.io/p/github/algolia/sitesearch) or clone the repository [[github.com/algolia/sitesearch](https://github.com/algolia/sitesearch)] and start iterating on the components. Feel free to use it as a starting point for your own projects. When you are happy with your changes, you can build the vanilla bundle and use it in your project.
+Use our CDN bundle or customize to your needs with our [CodeSandbox](https://codesandbox.io/p/github/algolia/sitesearch) or clone the repository [[github.com/algolia/sitesearch](https://github.com/algolia/sitesearch)] and start iterating on the components [Advanced usage]. Feel free to use it as a starting point for building your own experiences. When you are happy with your changes, you can build the vanilla bundle and use it in your project.
 
 ## Prerequisites
 
 - [Algolia prerequisites](/docs#prerequisites)
 
-## Bundled version
+## Bundled version available via CDN
 
 We provide bundled version & hosted versions of the all the vanilla search experiences. They are available via CDN and can be used in any project.
 
 ```html
 <!-- styles -->
-<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/<experience-name>.min.css" />
 
 <!-- scripts -->
-<script src="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.js"></script>
+<script src="https://unpkg.com/@algolia/sitesearch@latest/dist/<experience-name>.min.js"></script>
+
+<!-- Replace <experience-name> with the name of the experience you want to use -->
 ```
+
+> [!NOTE]
+> Always use the minified version of the experience to reduce the size of the bundle. (`.min.css` and `.min.js`)
 
 ### Usage
 
 We document how to use each experience in the [Experiences](/docs/experiences) section **under the VanillaJS tab**.
 
-Typical example:
+Typical example for the `search` experience:
 
 ```html
 <link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.css" />
