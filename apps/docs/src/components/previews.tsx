@@ -33,18 +33,20 @@ export function PreviewSiteSearch() {
           )}
         />
         <SearchWithAskAi
-          applicationId="betaHAXPMHIMMC"
-          apiKey="8b00405cba281a7d800ccec393e9af24"
+          applicationId="06YAZFOHSQ"
+          apiKey="94b6afdc316917b6e6cdf2763fa561df"
           indexName="algolia_podcast_sample_dataset"
-          assistantId="Y89iGlsnihaU"
+          assistantId="UpR727VnXnoG"
           placeholder="Search for podcasts..."
-          baseAskaiUrl="https://beta-askai.algolia.com"
           hitsPerPage={6}
           keyboardShortcut="cmd+k"
           buttonText="🎧 Search Podcasts"
           attributes={{
             primaryText: "title",
             secondaryText: "description",
+            tertiaryText: "itunesAuthor",
+            url: "url",
+            image: "imageUrl",
           }}
         />
       </div>
@@ -77,8 +79,8 @@ export function PreviewSearchNoAskAI() {
           )}
         />
         <Search
-          applicationId="betaHAXPMHIMMC"
-          apiKey="8b00405cba281a7d800ccec393e9af24"
+          applicationId="06YAZFOHSQ"
+          apiKey="94b6afdc316917b6e6cdf2763fa561df"
           indexName="algolia_podcast_sample_dataset"
           placeholder="Search for podcasts..."
           hitsPerPage={15}
@@ -87,7 +89,9 @@ export function PreviewSearchNoAskAI() {
           attributes={{
             primaryText: "title",
             secondaryText: "description",
+            tertiaryText: "itunesAuthor",
             image: "imageUrl",
+            url: "url",
           }}
         />
       </div>
@@ -122,11 +126,11 @@ export function PreviewHighlightToAskAI() {
         <div className=" ">
           <HighlightAskAI
             excludeElements={["pre", "code"]}
-            applicationId="betaHAXPMHIMMC"
-            apiKey="8b00405cba281a7d800ccec393e9af24"
+            applicationId="06YAZFOHSQ"
+            apiKey="94b6afdc316917b6e6cdf2763fa561df"
             indexName="algolia_podcast_sample_dataset"
-            assistantId="Y89iGlsnihaU"
-            askAiBaseUrl="https://beta-askai.algolia.com"
+            assistantId="UpR727VnXnoG"
+            askAiBaseUrl="https://askai.algolia.com"
             side="top"
             sideOffset={8}
           >

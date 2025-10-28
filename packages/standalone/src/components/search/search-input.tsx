@@ -1,4 +1,4 @@
-import type { FC, RefObject } from "react";
+import type { RefObject } from "react";
 import { memo, useState } from "react";
 import { useInstantSearch, useSearchBox } from "react-instantsearch";
 import { CloseIcon, SearchIcon } from "./icons";

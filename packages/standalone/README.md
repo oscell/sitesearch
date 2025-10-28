@@ -36,8 +36,10 @@ Add CSS + JS from unpkg, then initialize.
     keyboardShortcut: 'cmd+k', // or 'ctrl+k', 'alt+k', etc.
     darkMode: undefined, // true, false, or leave it empty
     attributes: {
-      primaryText: 'title',
-      secondaryText: 'description',
+      primaryText: 'title', // required primary text
+      secondaryText: 'description', // optional secondary text
+      tertiaryText: "itunesAuthor", // optional tertiary text
+      url: "url" // optional url attribute
       image: 'image', // optional URL attribute
     }
   });

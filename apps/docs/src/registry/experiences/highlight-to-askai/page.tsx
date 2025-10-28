@@ -8,11 +8,11 @@ export default function Page() {
       <div className="w-full max-w-3xl">
         <HighlightAskAI
           excludeElements={["pre", "code"]}
-          applicationId="betaHAXPMHIMMC"
-          apiKey="8b00405cba281a7d800ccec393e9af24"
+          applicationId="06YAZFOHSQ"
+          apiKey="94b6afdc316917b6e6cdf2763fa561df"
           indexName="algolia_podcast_sample_dataset"
-          assistantId="Y89iGlsnihaU"
-          askAiBaseUrl="https://beta-askai.algolia.com"
+          assistantId="UpR727VnXnoG"
+          askAiBaseUrl="https://askai.algolia.com"
           side="top"
           sideOffset={8}
         >

@@ -49,6 +49,7 @@ type HitsAttributesMapping = {
   primaryText: string;
   secondaryText?: string;
   tertiaryText?: string;
+  url?: string;
   image?: string;
 };
 
@@ -219,6 +220,7 @@ const HitsList = memo(function HitsList({
       primaryText: attributes?.primaryText,
       secondaryText: attributes?.secondaryText,
       tertiaryText: attributes?.tertiaryText,
+      url: attributes?.url,
       image: attributes?.image,
     }),
     [attributes],
@@ -233,14 +235,15 @@ const HitsList = memo(function HitsList({
       {hits.map((hit: any, idx: number) => {
         const isSel = selectedIndex === idx;
         const imageUrl = getByPath<string>(hit, mapping.image);
+        const url = getByPath<string>(hit, mapping.url);
         const hasImage = Boolean(imageUrl);
         const isImageFailed = failedImages[hit.objectID] || !hasImage;
         const primaryVal = getByPath<string>(hit, mapping.primaryText);
         return (
           <a
             key={hit.objectID}
-            href={hit.url}
-            target="_blank"
+            href={url ?? "#"}
+            target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
             className="flex flex-row items-center gap-4 cursor-pointer text-decoration-none text-foreground bg-background rounded-sm p-4 hover:bg-blue-50 aria-selected:bg-blue-50 dark:hover:bg-slate-900 dark:aria-selected:bg-slate-900 animate-in fade-in-0 zoom-in-95"
             role="option"

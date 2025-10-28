@@ -1,7 +1,9 @@
 import "@/app/global.css";
+import "@docsearch/css";
 import { RootProvider } from "fumadocs-ui/provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sora } from "next/font/google";
+import AlgoliaSearch from "@/components/algolia-search";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,7 +51,13 @@ export default function Layout({ children }: LayoutProps<"/">) {
       <body className="flex flex-col min-h-screen">
         <RootProvider
           search={{
-            enabled: false,
+            SearchDialog: AlgoliaSearch,
+            hotKey: [
+              {
+                display: "/",
+                key: "/",
+              },
+            ],
           }}
         >
           {children}

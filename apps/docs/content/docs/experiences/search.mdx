@@ -39,12 +39,14 @@ This will add the `Search` experience to your project under `components/search`.
 import Search from "@/components/search";
 
 <Search
-  applicationId="betaHAXPMHIMMC"
-  apiKey="8b00405cba281a7d800ccec393e9af24"
+  applicationId="06YAZFOHSQ"
+  apiKey="94b6afdc316917b6e6cdf2763fa561df"
   indexName="algolia_podcast_sample_dataset"
   attributes={{
     primaryText: "title",
     secondaryText: "description",
+    tertiaryText: "itunesAuthor",
+    url: "url",
     image: "imageUrl",
   }}
 />
@@ -75,11 +77,15 @@ import Search from "@/components/search";
 <script>
   SiteSearch.init({
     container: '#search-container',
-    appId: 'YOUR_APP_ID',
+    applicationId: 'YOUR_APP_ID',
     apiKey: 'YOUR_API_KEY',
     indexName: 'YOUR_INDEX_NAME',
     attributes: {
       primaryText: 'title',
+      secondaryText: 'description',
+      tertiaryText: 'itunesAuthor',
+      url: 'url',
+      image: 'imageUrl',
     },
   });
 </script>
@@ -107,11 +113,15 @@ import Search from "@/components/search";
 <script>
   SiteSearch.init({
     container: '#search-container',
-    appId: 'YOUR_APP_ID',
+    applicationId: 'YOUR_APP_ID',
     apiKey: 'YOUR_API_KEY',
     indexName: 'YOUR_INDEX_NAME',
     attributes: {
       primaryText: 'title',
+      secondaryText: 'description',
+      tertiaryText: 'itunesAuthor',
+      url: 'url',
+      image: 'imageUrl',
     },
   });
 </script>

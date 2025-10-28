@@ -60,7 +60,7 @@ export function useAskai(config: AskAIConfig) {
   };
 }
 
-const BASE_ASKAI_URL = "https://beta-askai.algolia.com";
+const BASE_ASKAI_URL = "https://askai.algolia.com";
 const TOKEN_KEY = "askai_token";
 
 type TokenPayload = { exp: number };

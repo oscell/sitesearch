@@ -274,6 +274,7 @@ type HitsAttributesMapping = {
   primaryText: string;
   secondaryText?: string;
   tertiaryText?: string;
+  url?: string;
   image?: string;
 };
 
@@ -905,6 +906,7 @@ const HitsList = memo(function HitsList({
       primaryText: attributes?.primaryText,
       secondaryText: attributes?.secondaryText,
       tertiaryText: attributes?.tertiaryText,
+      url: attributes?.url,
       image: attributes?.image,
     }),
     [attributes],
@@ -926,13 +928,14 @@ const HitsList = memo(function HitsList({
         const isSel = selectedIndex === idx + 1;
         const primaryVal = getByPath<string>(hit, mapping.primaryText);
         const imageUrl = getByPath<string>(hit, mapping.image);
+        const url = getByPath<string>(hit, mapping.url);
         const hasImage = Boolean(imageUrl);
         const isImageFailed = failedImages[hit.objectID] || !hasImage;
         return (
           <a
             key={hit.objectID}
-            href={hit.url}
-            target="_blank"
+            href={url ?? "#"}
+            target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
             className={`my-1 p-4 rounded-lg bg-background gap-4 cursor-pointer no-underline text-foreground transition-all duration-150 block hover:bg-accent hover:border-border hover:shadow-lg hover:-translate-y-px aria-selected:bg-accent aria-selected:border-border aria-selected:shadow-lg aria-selected:-translate-y-px animate-in fade-in-0 zoom-in-95 ${hasImage ? "flex flex-row items-center gap-4" : ""}`}
             role="option"

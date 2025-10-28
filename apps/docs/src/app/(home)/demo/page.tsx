@@ -25,8 +25,8 @@ export default function DemoPage() {
             {/* Interactive Demo */}
             <div className="mt-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6 overflow-hidden">
               <Search
-                applicationId="betaHAXPMHIMMC"
-                apiKey="8b00405cba281a7d800ccec393e9af24"
+                applicationId="06YAZFOHSQ"
+                apiKey="94b6afdc316917b6e6cdf2763fa561df"
                 indexName="algolia_podcast_sample_dataset"
               />
             </div>
@@ -48,14 +48,16 @@ export default function DemoPage() {
             {/* Interactive Demo */}
             <div className="mt-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6 overflow-hidden">
               <SearchAskAI
-                applicationId="betaHAXPMHIMMC"
-                apiKey="8b00405cba281a7d800ccec393e9af24"
+                applicationId="06YAZFOHSQ"
+                apiKey="94b6afdc316917b6e6cdf2763fa561df"
                 indexName="algolia_podcast_sample_dataset"
-                baseAskaiUrl="https://beta-askai.algolia.com"
-                assistantId="Y89iGlsnihaU"
+                assistantId="UpR727VnXnoG"
                 attributes={{
                   primaryText: "title",
                   secondaryText: "description",
+                  tertiaryText: "itunesAuthor",
+                  url: "url",
+                  image: "imageUrl",
                 }}
               />
             </div>

@@ -36,6 +36,7 @@
   --search-hit-title-font-size: 1rem;
   --search-hit-title-font-weight: 400;
   --search-hit-description-font-size: 0.9rem;
+  --search-hit-tertiary-font-size: 0.8rem;
 
   /* Chat */
   --search-chat-question-font-size: 1.5rem;
@@ -329,6 +330,14 @@
   color: var(--search-subtle-text-color);
   margin: 0.5rem 0;
   font-size: var(--search-hit-description-font-size);
+  line-height: 1.5;
+  text-overflow: ellipsis;
+}
+
+.ss-exp .ss-infinite-hits-item-tertiary {
+  color: var(--search-subtle-text-color);
+  margin: 0.5rem 0;
+  font-size: var(--search-hit-tertiary-font-size);
   line-height: 1.5;
   text-overflow: ellipsis;
 }

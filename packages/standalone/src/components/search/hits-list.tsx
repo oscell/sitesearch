@@ -26,6 +26,7 @@ export const HitsList = memo(function HitsList({
       primaryText: attributes?.primaryText as string,
       secondaryText: attributes?.secondaryText,
       tertiaryText: attributes?.tertiaryText,
+      url: attributes?.url,
       image: attributes?.image,
     }),
     [attributes],
@@ -38,16 +39,18 @@ export const HitsList = memo(function HitsList({
   return (
     <>
       {hits.map((hit: SearchHit, idx: number) => {
+        console.log(hit);
         const isSel = selectedIndex === idx;
         const imageUrl = getByPath<string>(hit, mapping.image);
         const primaryVal = getByPath<string>(hit, mapping.primaryText);
+        const url = getByPath<string>(hit, mapping.url);
         const hasImage = Boolean(imageUrl);
         const isImageFailed = failedImages[hit.objectID] || !hasImage;
         return (
           <a
             key={hit.objectID}
-            href={hit.url}
-            target="_blank"
+            href={url ?? "#"}
+            target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
             className="ss-infinite-hits-item ss-infinite-hits-anchor"
             role="option"
@@ -84,16 +87,16 @@ export const HitsList = memo(function HitsList({
                   hit={hit}
                 />
               </p>
-              <p className="ss-infinite-hits-item-description">
-                {mapping.secondaryText ? (
+              {mapping.secondaryText ? (
+                <p className="ss-infinite-hits-item-description">
                   <Highlight
                     attribute={toAttributePath(mapping.secondaryText)}
                     hit={hit}
                   />
-                ) : null}
-              </p>
+                </p>
+              ) : null}
               {mapping.tertiaryText ? (
-                <p className="ss-infinite-hits-item-description">
+                <p className="ss-infinite-hits-item-tertiary">
                   <Highlight
                     attribute={toAttributePath(mapping.tertiaryText)}
                     hit={hit}

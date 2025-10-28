@@ -5,6 +5,8 @@ export interface HitsAttributesMapping {
   secondaryText?: string;
   /** Attribute path (supports dotted path) for an optional tertiary line */
   tertiaryText?: string;
+  /** Attribute path (supports dotted path) for the URL */
+  url?: string;
   /** Attribute path (supports dotted path) for an optional image URL */
   image?: string;
 }

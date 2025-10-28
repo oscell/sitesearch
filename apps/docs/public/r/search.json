@@ -9,12 +9,8 @@
     "react-instantsearch@^7.16.2",
     "lucide-react"
   ],
-  "devDependencies": [
-    "tw-animate-css"
-  ],
-  "registryDependencies": [
-    "button"
-  ],
+  "devDependencies": ["tw-animate-css"],
+  "registryDependencies": ["button"],
   "files": [
     {
       "path": "src/registry/experiences/search/components/search.tsx",
@@ -28,7 +24,7 @@
     },
     {
       "path": "src/registry/experiences/search/page.tsx",
-      "content": "\"use client\";\n\nimport Search from \"@/registry/experiences/search/components/search\";\n\nexport default function Page() {\n  return (\n    <div className=\"flex items-center justify-center min-h-[100px] md:min-h-[400px] relative p-4\">\n      <Search\n        applicationId=\"betaHAXPMHIMMC\"\n        apiKey=\"8b00405cba281a7d800ccec393e9af24\"\n        indexName=\"algolia_podcast_sample_dataset\"\n      />\n    </div>\n  );\n}\n",
+      "content": "\"use client\";\n\nimport Search from \"@/registry/experiences/search/components/search\";\n\nexport default function Page() {\n  return (\n    <div className=\"flex items-center justify-center min-h-[100px] md:min-h-[400px] relative p-4\">\n      <Search\n        applicationId=\"06YAZFOHSQ\"\n        apiKey=\"94b6afdc316917b6e6cdf2763fa561df\"\n        indexName=\"algolia_podcast_sample_dataset\"\n      />\n    </div>\n  );\n}\n",
       "type": "registry:page",
       "target": "app/search/page.tsx"
     }

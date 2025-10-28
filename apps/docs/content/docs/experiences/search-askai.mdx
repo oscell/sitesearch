@@ -41,13 +41,15 @@ This will add the `Search with AskAI` experience to your project under `componen
 import SearchWithAskAi from "@/components/search-ai";
 
 <SearchWithAskAi
-  applicationId="betaHAXPMHIMMC"
-  apiKey="8b00405cba281a7d800ccec393e9af24"
+  applicationId="06YAZFOHSQ"
+  apiKey="94b6afdc316917b6e6cdf2763fa561df"
   indexName="algolia_podcast_sample_dataset"
-  assistantId="Y89iGlsnihaU"
+  assistantId="UpR727VnXnoG"
   attributes={{
     primaryText: "title",
     secondaryText: "description",
+    tertiaryText: "itunesAuthor",
+    url: "url",
     image: "imageUrl",
   }}
 />
@@ -90,12 +92,16 @@ Prerequisites for using the `SearchWithAskAi` component:
 <script>
   SiteSearchAskAI.init({
     container: '#search-container',
-    appId: 'YOUR_APP_ID',
+    applicationId: 'YOUR_APP_ID',
     apiKey: 'YOUR_API_KEY',
     indexName: 'YOUR_INDEX_NAME',
     assistantId: 'YOUR_ASSISTANT_ID',
     attributes: {
       primaryText: 'title',
+      secondaryText: 'description',
+      tertiaryText: 'itunesAuthor',
+      url: 'url',
+      image: 'imageUrl',
     },
   });
 </script>
@@ -123,12 +129,16 @@ Prerequisites for using the `SearchWithAskAi` component:
 <script>
   SiteSearchAskAI.init({
     container: '#search-container',
-    appId: 'YOUR_APP_ID',
+    applicationId: 'YOUR_APP_ID',
     apiKey: 'YOUR_API_KEY',
     indexName: 'YOUR_INDEX_NAME',
     assistantId: 'YOUR_ASSISTANT_ID',
     attributes: {
       primaryText: 'title',
+      secondaryText: 'description',
+      tertiaryText: 'itunesAuthor',
+      url: 'url',
+      image: 'imageUrl',
     },
   });
 </script>
