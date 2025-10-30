@@ -15,12 +15,12 @@ export function PreviewSiteSearch() {
       <div className="flex justify-between items-center mb-2 ">
         <div>
           <CopyCodeButton
-            code={`npx shadcn@latest add @algolia/highlight-to-askai`}
+            code={`npx shadcn@latest add @algolia/search-ai`}
             title="Copy install command"
           ></CopyCodeButton>
         </div>
         <div>
-          <OpenInV0Button name="highlight-to-askai"></OpenInV0Button>
+          <OpenInV0Button name="search-ai"></OpenInV0Button>
         </div>
       </div>
       <div className="bg-background relative flex h-[400px] items-center justify-center overflow-hidden rounded-lg border p-20">
