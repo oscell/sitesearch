@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import DropdownSearch from "@/registry/experiences/dropdown-search/components/dropdown-search";
 import { HighlightAskAI } from "@/registry/experiences/highlight-to-askai/components/highlight-to-askai";
 import Search from "@/registry/experiences/search/components/search";
 import SearchWithAskAi from "@/registry/experiences/search-askai/components/search-ai";
@@ -138,7 +139,7 @@ export function PreviewHighlightToAskAI() {
               <h3>Try it</h3>
               <p>
                 Select any text in this block to see a small tooltip. Click
-                <em> Ask AI?</em> to expand the panel. We’ll wire streaming
+                <em> Ask AI?</em> to expand the panel. We'll wire streaming
                 later.
               </p>
               <p>
@@ -151,6 +152,51 @@ export function PreviewHighlightToAskAI() {
           <p className="mt-2 text-right text-xs opacity-60">
             Tip: Try selecting a sentence across multiple lines.
           </p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function PreviewDropdownSearch() {
+  return (
+    <>
+      <div className="flex justify-between items-center mb-2 ">
+        <div>
+          <CopyCodeButton
+            code={`npx shadcn@latest add @algolia/dropdown-search`}
+            title="Copy install command"
+          ></CopyCodeButton>
+        </div>
+        <div>
+          <OpenInV0Button name="dropdown-search"></OpenInV0Button>
+        </div>
+      </div>
+      <div className="bg-background relative flex h-[400px] items-center justify-center overflow-hidden rounded-lg border p-20">
+        <GridPattern
+          width={40}
+          height={40}
+          x={-1}
+          y={-1}
+          className={cn(
+            "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]",
+          )}
+        />
+        <div className="w-full max-w-md">
+          <DropdownSearch
+            applicationId="06YAZFOHSQ"
+            apiKey="94b6afdc316917b6e6cdf2763fa561df"
+            indexName="algolia_podcast_sample_dataset"
+            placeholder="Search podcasts..."
+            hitsPerPage={5}
+            attributes={{
+              primaryText: "title",
+              secondaryText: "description",
+              tertiaryText: "itunesAuthor",
+              image: "imageUrl",
+              url: "url",
+            }}
+          />
         </div>
       </div>
     </>

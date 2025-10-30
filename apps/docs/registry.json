@@ -5,6 +5,35 @@
   "homepage": "https://algolia.com",
   "items": [
     {
+      "name": "dropdown-search",
+      "type": "registry:block",
+      "title": "Algolia dropdown search experience",
+      "description": "Inline autocomplete dropdown search experience, powered by Algolia's InstantSearch",
+      "dependencies": [
+        "algoliasearch@^5",
+        "react-instantsearch@^7.16.2",
+        "lucide-react",
+        "@radix-ui/react-popover"
+      ],
+      "registryDependencies": ["input"],
+      "files": [
+        {
+          "path": "src/registry/experiences/dropdown-search/components/dropdown-search.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/experiences/dropdown-search/hooks/use-keyboard-navigation.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "src/registry/experiences/dropdown-search/page.tsx",
+          "type": "registry:page",
+          "target": "app/dropdown-search/page.tsx"
+        }
+      ],
+      "categories": ["search"]
+    },
+    {
       "name": "search",
       "type": "registry:block",
       "title": "Algolia crafted search experience",

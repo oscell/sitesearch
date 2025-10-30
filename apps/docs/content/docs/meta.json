@@ -9,6 +9,7 @@
     "---Search Experiences---",
     "experiences/search",
     "experiences/search-askai",
+    "experiences/dropdown-search",
     "---Ask AI Experiences---",
     "experiences/ask-ai/highlight-to-askai"
   ]

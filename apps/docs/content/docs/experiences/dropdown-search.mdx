@@ -1,0 +1,161 @@
+---
+title: Dropdown Search
+description: "Inline autocomplete dropdown search experience powered by Algolia's InstantSearch."
+---
+
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { Tabs, TabsList, TabsTrigger, TabsContent, TabsContents } from '@/components/animate-ui/components/animate/tabs';
+import { LogosShadcn } from '@/components/icons/shadcn';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+The `Dropdown Search` experience provides an inline autocomplete dropdown that appears below the search input, perfect for navigation bars, headers, or any context where a modal would be too intrusive.
+
+## Use cases
+
+- Navigation bar search
+- Header search component
+- Inline search without modal interruption
+- Autocomplete-style search experiences
+
+## Preview
+
+<PreviewDropdownSearch />
+
+<Tabs>
+  <div className="flex items-center justify-between gap-2 mt-20 mb-2">
+    <h2 className="!my-0 mr-4">Usage</h2>
+    <TabsList className="flex items-center gap-2">
+      <TabsTrigger value="shadcn" className="flex items-center gap-2 px-2"> <LogosShadcn /> <span>shadcn/ui</span></TabsTrigger>
+    </TabsList>
+  </div>
+  <TabsContents>
+    <TabsContent value="shadcn">
+```tsx
+npx shadcn@latest add @algolia/dropdown-search
+```
+
+This will add the `Dropdown Search` experience to your project under `components/dropdown-search`. Use it like this:
+
+```tsx
+import DropdownSearch from "@/components/dropdown-search";
+
+<DropdownSearch
+  applicationId="06YAZFOHSQ"
+  apiKey="94b6afdc316917b6e6cdf2763fa561df"
+  indexName="algolia_podcast_sample_dataset"
+  placeholder="Search podcasts..."
+  hitsPerPage={5}
+  attributes={{
+    primaryText: "title",
+    secondaryText: "description",
+    tertiaryText: "itunesAuthor",
+    url: "url",
+    image: "imageUrl",
+  }}
+/>
+```
+
+### Structure
+
+<Files>
+  <Folder name="app">
+    <File name="page.tsx" />
+  </Folder>
+  <Folder name="components" defaultOpen>
+    <File name="dropdown-search.tsx" />
+  </Folder>
+  <Folder name="hooks" defaultOpen>
+    <File name="use-keyboard-navigation.tsx" />
+  </Folder>
+  <File name="package.json" />
+</Files>
+    </TabsContent>
+  </TabsContents>
+</Tabs>
+
+## Behavior
+
+- **Opens automatically**: Dropdown appears when there's a query (query length > 0)
+- **Closes on outside click**: Radix Popover automatically handles closing when clicking outside
+- **Closes on selection**: Selecting a result closes the dropdown and clears the query
+- **Keyboard navigation**: Arrow keys to navigate, Enter to select
+- **No modal**: Stays inline with your layout
+
+## References
+<TypeTable
+  type={{
+    applicationId: {
+      description: "Algolia Application ID (required)",
+      type: "string",
+      required: true,
+    },
+    apiKey: {
+      description: "Algolia API Key (required)",
+      type: "string",
+      required: true,
+    },
+    indexName: {
+      description: "Algolia Index Name (required)",
+      type: "string",
+      required: true,
+    },
+    placeholder: {
+      description: "Placeholder text for search input (optional, defaults to \"Search...\")",
+      type: "string",
+      default: "\"Search...\"",
+      required: false,
+    },
+    hitsPerPage: {
+      description: "Number of hits per page (optional, defaults to 5)",
+      type: "number",
+      default: 5,
+      required: false,
+    },
+    attributes: {
+      description: "Map which hit attributes to render (supports dotted paths)",
+      type: "HitsAttributesMapping",
+      parameters: [
+        {
+          name: "primaryText",
+          description: "The first attribute to render in the search experience",
+        },
+        {
+          name: "secondaryText",
+          description: "The second attribute to render in the search experience (optional)",
+        },
+        {
+          name: "tertiaryText",
+          description: "The third attribute to render in the search experience (optional)",
+        },
+        {
+          name: "url",
+          description: "The URL to render in the search experience (optional)",
+        },
+        {
+          name: "image",
+          description: "The image to render in the search experience (optional)",
+        },
+      ],
+      required: true,
+    },
+    className: {
+      description: "Custom className for the root container (optional)",
+      type: "string",
+      required: false,
+    },
+    maxHeight: {
+      description: "Max height for dropdown (optional, defaults to \"300px\")",
+      type: "string",
+      default: "\"300px\"",
+      required: false,
+    },
+  }}
+/>
+
+## Extending further
+
+- Change the styling to match your brand
+- Customize the dropdown appearance via Radix Popover props
+- Add custom behavior on item selection
+- Open in v0 for more customization
+
