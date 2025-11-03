@@ -1,12 +1,7 @@
 "use client";
 
 import Link from "fumadocs-core/link";
-import {
-  ArrowRightIcon,
-  MessageSquareIcon,
-  SearchIcon,
-  SparklesIcon,
-} from "lucide-react";
+import { ArrowRightIcon, SearchIcon, SparklesIcon } from "lucide-react";
 import { WordRotate } from "@/components/ui/word-rotate";
 import Search from "@/registry/experiences/search/components/search";
 import SearchAskAI from "@/registry/experiences/search-askai/components/search-ai";
