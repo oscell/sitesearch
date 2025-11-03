@@ -43,7 +43,6 @@ export const HitsList = memo(function HitsList({
   return (
     <>
       {hits.map((hit: SearchHit, idx: number) => {
-        console.log(hit);
         const isSel = selectedIndex === idx;
         const imageUrl = getByPath<string>(hit, mapping.image);
         const primaryVal = getByPath<string>(hit, mapping.primaryText);
