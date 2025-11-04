@@ -206,7 +206,6 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
     if (lastSentRef.current === trimmed) return;
     refine("");
     if (inputRef.current) {
-      inputRef.current.value = "";
       inputRef.current.focus();
     }
     sendMessage({ text: trimmed });
@@ -341,7 +340,12 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
             onAskAI={() => {
               setShowChat(true);
             }}
-            onClear={() => refine("")}
+            onClear={() => {
+              refine("");
+              if (inputRef.current) {
+                inputRef.current.focus();
+              }
+            }}
           />
         )}
       </div>

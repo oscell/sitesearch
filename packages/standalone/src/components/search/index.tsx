@@ -229,7 +229,15 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
           />
         )}
         {noResults && query && (
-          <NoResults query={query} onClear={() => refine("")} />
+          <NoResults
+            query={query}
+            onClear={() => {
+              refine("");
+              if (inputRef.current) {
+                inputRef.current.focus();
+              }
+            }}
+          />
         )}
       </div>
       <Footer />

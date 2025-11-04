@@ -1,5 +1,5 @@
 import type { RefObject } from "react";
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import { useInstantSearch, useSearchBox } from "react-instantsearch";
 import { CloseIcon, SearchIcon } from "./icons";
 
@@ -16,22 +16,10 @@ export interface SearchInputProps {
 export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
   const { status } = useInstantSearch();
   const { query, refine } = useSearchBox();
-  const [inputValue, setInputValue] = useState(query || "");
-  if (props.inputRef.current) {
-    props.inputRef.current.focus();
-  }
-
-  // keep the input value in sync with the query
-  useEffect(() => {
-    if (query !== inputValue) {
-      setInputValue(query || "");
-    }
-  }, [query, inputValue]);
 
   const isSearchStalled = status === "stalled";
 
   function setQuery(newQuery: string) {
-    setInputValue(newQuery);
     refine(newQuery);
   }
 
@@ -48,6 +36,9 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         event.preventDefault();
         event.stopPropagation();
         setQuery("");
+        if (props.inputRef.current) {
+          props.inputRef.current.focus();
+        }
       }}
     >
       <div
@@ -69,7 +60,7 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         spellCheck={false}
         maxLength={512}
         type="search"
-        value={inputValue}
+        value={query || ""}
         onChange={(event) => {
           setQuery(event.currentTarget.value);
         }}
@@ -96,9 +87,12 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         <button
           type="reset"
           className="ss-search-clear-button"
-          hidden={!inputValue || inputValue.length === 0 || isSearchStalled}
+          hidden={!query || query.length === 0 || isSearchStalled}
           onClick={() => {
             setQuery("");
+            if (props.inputRef.current) {
+              props.inputRef.current.focus();
+            }
           }}
         >
           Clear

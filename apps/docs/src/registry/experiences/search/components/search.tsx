@@ -328,12 +328,10 @@ export interface SearchInputProps {
 const SearchInput = memo(function SearchInput(props: SearchInputProps) {
   const { status } = useInstantSearch();
   const { query, refine } = useSearchBox();
-  const [inputValue, setInputValue] = useState(query || "");
 
   const isSearchStalled = status === "stalled";
 
   function setQuery(newQuery: string) {
-    setInputValue(newQuery);
     refine(newQuery);
   }
 
@@ -378,7 +376,7 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         name="algolia-search-input"
         maxLength={512}
         type="search"
-        value={inputValue}
+        value={query}
         onChange={(event) => {
           setQuery(event.currentTarget.value);
         }}
@@ -406,9 +404,12 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
           type="reset"
           variant="ghost"
           className="px-2 text-muted-foreground"
-          hidden={!inputValue || inputValue.length === 0 || isSearchStalled}
+          hidden={!query || query.length === 0 || isSearchStalled}
           onClick={() => {
             setQuery("");
+            if (props.inputRef.current) {
+              props.inputRef.current.focus();
+            }
           }}
         >
           Clear
@@ -615,7 +616,15 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
           />
         )}
         {noResults && query && (
-          <NoResults query={query} onClear={() => refine("")} />
+          <NoResults
+            query={query}
+            onClear={() => {
+              refine("");
+              if (inputRef.current) {
+                inputRef.current.focus();
+              }
+            }}
+          />
         )}
       </div>
       <Footer />

@@ -1073,13 +1073,14 @@ const SearchLeftButton = memo(function SearchLeftButton({
 const SearchInput = memo(function SearchInput(props: SearchInputProps) {
   const { status } = useInstantSearch();
   const { query, refine } = useSearchBox();
-  const [inputValue, setInputValue] = useState(query || "");
+  const [chatInput, setChatInput] = useState("");
 
   const isSearchStalled = status === "stalled";
 
   function setQuery(newQuery: string) {
-    setInputValue(newQuery);
-    if (!props.showChat) {
+    if (props.showChat) {
+      setChatInput(newQuery);
+    } else {
       refine(newQuery);
     }
   }
@@ -1087,7 +1088,7 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
   // Clear the input when entering chat mode
   useEffect(() => {
     if (props.showChat) {
-      setInputValue("");
+      setChatInput("");
     }
   }, [props.showChat]);
 
@@ -1096,6 +1097,8 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
     : props.showChat
       ? "Ask AI anything about Algolia"
       : props.placeholder;
+
+  const currentValue = props.showChat ? chatInput : query || "";
 
   return (
     <search
@@ -1128,7 +1131,7 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         spellCheck={false}
         maxLength={512}
         type="search"
-        value={inputValue}
+        value={currentValue}
         disabled={props.isGenerating}
         onChange={(event) => {
           setQuery(event.currentTarget.value);
@@ -1150,11 +1153,16 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
           }
           if (e.key === "Enter") {
             e.preventDefault();
-            if (props.onEnter?.(inputValue)) {
-              setQuery("");
+            const valueAtEnter = props.showChat ? chatInput : query || "";
+            if (props.onEnter?.(valueAtEnter)) {
+              if (props.showChat) {
+                setChatInput("");
+              } else {
+                setQuery("");
+              }
               return;
             }
-            const trimmed = inputValue.trim();
+            const trimmed = valueAtEnter.trim();
             if (trimmed) {
               props.setShowChat(true);
             }
@@ -1168,9 +1176,12 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
           type="reset"
           variant="ghost"
           className="px-2 text-muted-foreground"
-          hidden={!inputValue || inputValue.length === 0 || isSearchStalled}
+          hidden={!currentValue || currentValue.length === 0 || isSearchStalled}
           onClick={() => {
             setQuery("");
+            if (props.inputRef.current) {
+              props.inputRef.current.focus();
+            }
           }}
         >
           Clear
@@ -1308,7 +1319,6 @@ const ResultsPanel = memo(function ResultsPanel({
     if (lastSentRef.current === trimmed) return;
     refine("");
     if (inputRef.current) {
-      inputRef.current.value = "";
       inputRef.current.focus();
     }
     sendMessage({ text: trimmed });
@@ -1562,7 +1572,12 @@ function SearchModal({ onClose, config }: SearchModalProps) {
             onAskAI={() => {
               setShowChat(true);
             }}
-            onClear={() => refine("")}
+            onClear={() => {
+              refine("");
+              if (inputRef.current) {
+                inputRef.current.focus();
+              }
+            }}
           />
         )}
       </div>
