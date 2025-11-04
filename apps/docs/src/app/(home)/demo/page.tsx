@@ -28,6 +28,13 @@ export default function DemoPage() {
                 applicationId="06YAZFOHSQ"
                 apiKey="94b6afdc316917b6e6cdf2763fa561df"
                 indexName="algolia_podcast_sample_dataset"
+                attributes={{
+                  primaryText: "title",
+                  secondaryText: "description",
+                  tertiaryText: "itunesAuthor",
+                  url: "url",
+                  image: "imageUrl",
+                }}
               />
             </div>
           </div>
