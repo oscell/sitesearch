@@ -39,7 +39,11 @@ export interface SearchConfig {
   /** Custom search button props (optional) */
   buttonProps?: React.ComponentProps<typeof SearchButton>;
   /** Map which hit attributes to render (supports dotted paths) */
-  attributes?: HitsAttributesMapping;
+  attributes: HitsAttributesMapping;
+  /** Additional Algolia search parameters (optional) - e.g., analytics, filters, distinct, etc. */
+  searchParameters?: Record<string, unknown>;
+  /** Enable Algolia Insights (optional, defaults to true) */
+  insights?: boolean;
 }
 // =========================================================================
 // Attribute Mapping
@@ -206,7 +210,7 @@ interface HitsListProps {
   hits: any[];
   query: string;
   selectedIndex: number;
-  attributes?: HitsAttributesMapping;
+  attributes: HitsAttributesMapping;
   onHoverIndex?: (index: number) => void;
   hoverEnabled?: boolean;
 }
@@ -221,11 +225,11 @@ const HitsList = memo(function HitsList({
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
     () => ({
-      primaryText: attributes?.primaryText,
-      secondaryText: attributes?.secondaryText,
-      tertiaryText: attributes?.tertiaryText,
-      url: attributes?.url,
-      image: attributes?.image,
+      primaryText: attributes.primaryText,
+      secondaryText: attributes.secondaryText,
+      tertiaryText: attributes.tertiaryText,
+      url: attributes.url,
+      image: attributes.image,
     }),
     [attributes],
   );
@@ -292,20 +296,14 @@ const HitsList = memo(function HitsList({
                   hit={hit}
                 />
               </p>
-              <p className="text-sm mt-2 text-muted-foreground [&_mark]:bg-transparent [&_mark]:text-foreground [&_mark]:underline [&_mark]:underline-offset-4">
-                {mapping.secondaryText ? (
-                  <Highlight
-                    attribute={toAttributePath(mapping.secondaryText) as any}
-                    hit={hit}
-                  />
-                ) : null}
-              </p>
+              {mapping.secondaryText ? (
+                <p className="text-sm mt-2 text-muted-foreground">
+                  {getByPath<string | number>(hit, mapping.secondaryText)}
+                </p>
+              ) : null}
               {mapping.tertiaryText ? (
-                <p className="text-sm text-muted-foreground [&_mark]:bg-transparent [&_mark]:text-foreground [&_mark]:underline [&_mark]:underline-offset-4 mt-2">
-                  <Highlight
-                    attribute={toAttributePath(mapping.tertiaryText) as any}
-                    hit={hit}
-                  />
+                <p className="text-sm text-muted-foreground mt-2">
+                  {getByPath<string | number>(hit, mapping.tertiaryText)}
                 </p>
               ) : null}
             </div>
@@ -589,7 +587,10 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
 
   return (
     <>
-      <Configure hitsPerPage={config.hitsPerPage || 8} />
+      <Configure
+        hitsPerPage={config.hitsPerPage || 8}
+        {...config.searchParameters}
+      />
       <div className="flex flex-col">
         <SearchBox
           query={query}
@@ -678,7 +679,7 @@ export default function SearchExperience(config: SearchConfig) {
 
   // Parse keyboard shortcut (defaults to cmd+k)
   const shortcut = config.keyboardShortcut || "cmd+k";
-  const [modifierKey, key] = shortcut.toLowerCase().split("+");
+  const [modifierKey = "cmd", key = "k"] = shortcut.toLowerCase().split("+");
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: we don't to rerun
   useEffect(() => {
@@ -713,7 +714,7 @@ export default function SearchExperience(config: SearchConfig) {
           searchClient={searchClient}
           indexName={config.indexName}
           future={{ preserveSharedStateOnUnmount: true }}
-          insights
+          insights={config.insights ?? true}
         >
           <SearchModal onClose={closeModal} config={config} />
         </InstantSearch>

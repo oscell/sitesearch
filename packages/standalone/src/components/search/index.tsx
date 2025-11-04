@@ -87,9 +87,7 @@ const NoResults: FC<NoResultsProps> = memo(function NoResults({
         <SearchIcon />
       </div>
       <p className="ss-no-results-title">No results for "{query}"</p>
-      <p className="ss-no-results-subtitle">
-        Try a different query or ask AI to help.
-      </p>
+      <p className="ss-no-results-subtitle">Try a different query</p>
       <div className="ss-no-results-actions">
         <button type="button" className="ss-no-results-btn" onClick={onClear}>
           Clear query

@@ -74,6 +74,10 @@ export interface SearchWithAskAIConfig {
   buttonProps?: React.ComponentProps<typeof SearchButton>;
   /** Map which hit attributes to render (supports dotted paths) */
   attributes: HitsAttributesMapping;
+  /** Additional Algolia search parameters (optional) - e.g., analytics, filters, distinct, etc. */
+  searchParameters?: Record<string, unknown>;
+  /** Enable Algolia Insights (optional, defaults to true) */
+  insights?: boolean;
 }
 
 interface SearchButtonProps {
@@ -587,7 +591,6 @@ const ChatWidget = memo(function ChatWidget({
                   <div className="font-semibold text-2xl text-foreground mb-2">
                     {exchange.userMessage.parts.map((part, index) =>
                       part.type === "text" ? (
-                        // biome-ignore lint/suspicious/noArrayIndexKey: better
                         <span key={index}>{part.text}</span>
                       ) : null,
                     )}
@@ -626,7 +629,6 @@ const ChatWidget = memo(function ChatWidget({
                           } else if (part.type === "tool-searchIndex") {
                             if (part.state === "input-streaming") {
                               return (
-                                // biome-ignore lint/suspicious/noArrayIndexKey: better
                                 <p
                                   className="text-[0.95rem] flex my-2 gap-2 items-center text-muted-foreground"
                                   key={`${index}`}
@@ -902,7 +904,7 @@ interface HitsListProps {
   query: string;
   selectedIndex: number;
   onAskAI: () => void;
-  attributes?: HitsAttributesMapping;
+  attributes: HitsAttributesMapping;
   onHoverIndex?: (index: number) => void;
   hoverEnabled?: boolean;
 }
@@ -919,11 +921,11 @@ const HitsList = memo(function HitsList({
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
     () => ({
-      primaryText: attributes?.primaryText,
-      secondaryText: attributes?.secondaryText,
-      tertiaryText: attributes?.tertiaryText,
-      url: attributes?.url,
-      image: attributes?.image,
+      primaryText: attributes.primaryText,
+      secondaryText: attributes.secondaryText,
+      tertiaryText: attributes.tertiaryText,
+      url: attributes.url,
+      image: attributes.image,
     }),
     [attributes],
   );
@@ -998,22 +1000,14 @@ const HitsList = memo(function HitsList({
                   hit={hit}
                 />
               </p>
-              {mapping.secondaryText && (
-                <p className="text-muted-foreground m-0 text-sm leading-normal overflow-hidden text-ellipsis [&_mark]:text-foreground [&_mark]:bg-transparent [&_mark]:underline [&_mark]:decoration-1 [&_mark]:underline-offset-4">
-                  {mapping.secondaryText ? (
-                    <Highlight
-                      attribute={toAttributePath(mapping.secondaryText)}
-                      hit={hit}
-                    />
-                  ) : null}
+              {mapping.secondaryText ? (
+                <p className="text-sm mt-2 text-muted-foreground">
+                  {getByPath<string>(hit, mapping.secondaryText)}
                 </p>
-              )}
+              ) : null}
               {mapping.tertiaryText ? (
-                <p className="text-muted-foreground m-0 text-sm leading-normal overflow-hidden text-ellipsis [&_mark]:text-foreground [&_mark]:bg-transparent [&_mark]:underline [&_mark]:decoration-1 [&_mark]:underline-offset-4 mt-2">
-                  <Highlight
-                    attribute={toAttributePath(mapping.tertiaryText)}
-                    hit={hit}
-                  />
+                <p className="text-sm text-muted-foreground mt-2">
+                  {getByPath<string>(hit, mapping.tertiaryText)}
                 </p>
               ) : null}
             </div>
@@ -1518,7 +1512,10 @@ function SearchModal({ onClose, config }: SearchModalProps) {
 
   return (
     <>
-      <Configure hitsPerPage={config.hitsPerPage || 8} />
+      <Configure
+        hitsPerPage={config.hitsPerPage || 8}
+        {...(config.searchParameters || {})}
+      />
       <div className="flex flex-col">
         <SearchBox
           query={query}
@@ -1587,7 +1584,7 @@ export default function SearchExperience(config: SearchWithAskAIConfig) {
   const closeModal = () => setIsModalOpen(false);
 
   const shortcut = config.keyboardShortcut || "cmd+k";
-  const [modifierKey, key] = shortcut.toLowerCase().split("+");
+  const [modifierKey = "cmd", key = "k"] = shortcut.toLowerCase().split("+");
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: we don't to rerun
   useEffect(() => {
@@ -1622,7 +1619,7 @@ export default function SearchExperience(config: SearchWithAskAIConfig) {
           searchClient={searchClient}
           indexName={config.indexName}
           future={{ preserveSharedStateOnUnmount: true }}
-          insights
+          insights={config.insights ?? true}
         >
           <SearchModal onClose={closeModal} config={config} />
         </InstantSearch>

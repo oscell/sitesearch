@@ -38,6 +38,10 @@ export interface DropdownSearchConfig {
   className?: string;
   /** Max height for dropdown (optional, defaults to "300px") */
   maxHeight?: string;
+  /** Enable Algolia Insights (optional, defaults to true) */
+  insights?: boolean;
+  /** Additional Algolia search parameters (optional) - e.g., analytics, filters, distinct, etc. */
+  searchParameters?: Record<string, unknown>;
 }
 
 // =========================================================================
@@ -374,7 +378,10 @@ function DropdownSearchInner({ config }: DropdownSearchInnerProps) {
 
   return (
     <>
-      <Configure hitsPerPage={config.hitsPerPage || 5} />
+      <Configure
+        hitsPerPage={config.hitsPerPage || 5}
+        {...(config.searchParameters || {})}
+      />
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <div className="w-full">
@@ -433,7 +440,7 @@ export default function DropdownSearchExperience(config: DropdownSearchConfig) {
         searchClient={searchClient}
         indexName={config.indexName}
         future={{ preserveSharedStateOnUnmount: true }}
-        insights
+        insights={config.insights ?? true}
       >
         <DropdownSearchInner config={config} />
       </InstantSearch>

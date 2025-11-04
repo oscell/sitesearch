@@ -65,12 +65,20 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
     }
   }
 
-  // Clear the input when entering chat mode
+  if (props.inputRef.current) {
+    props.inputRef.current.focus();
+  }
+
   useEffect(() => {
+    // Clear the input when entering chat mode
     if (props.showChat) {
       setInputValue("");
     }
-  }, [props.showChat]);
+    // keep the input value in sync with the query
+    if (query !== inputValue) {
+      setInputValue(query || "");
+    }
+  }, [props.showChat, query, inputValue]);
 
   // Placeholder logic:
   // - if generating, show "Answering..."

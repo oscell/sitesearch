@@ -1,5 +1,5 @@
 import type { RefObject } from "react";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useInstantSearch, useSearchBox } from "react-instantsearch";
 import { CloseIcon, SearchIcon } from "./icons";
 
@@ -17,6 +17,16 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
   const { status } = useInstantSearch();
   const { query, refine } = useSearchBox();
   const [inputValue, setInputValue] = useState(query || "");
+  if (props.inputRef.current) {
+    props.inputRef.current.focus();
+  }
+
+  // keep the input value in sync with the query
+  useEffect(() => {
+    if (query !== inputValue) {
+      setInputValue(query || "");
+    }
+  }, [query, inputValue]);
 
   const isSearchStalled = status === "stalled";
 
@@ -37,11 +47,7 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
       onReset={(event) => {
         event.preventDefault();
         event.stopPropagation();
-
         setQuery("");
-        if (props.inputRef.current) {
-          props.inputRef.current.focus();
-        }
       }}
     >
       <div
