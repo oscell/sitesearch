@@ -143,6 +143,7 @@ interface ResultsPanelProps {
   sendMessage: (options: { text: string }) => void | Promise<void>;
   onHoverIndex?: (index: number) => void;
   scrollOnSelectionChange?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
@@ -159,6 +160,7 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
   sendMessage,
   onHoverIndex,
   scrollOnSelectionChange = true,
+  sendEvent,
 }) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -236,6 +238,7 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
           attributes={config.attributes}
           onHoverIndex={onHoverIndex}
           hoverEnabled={hoverEnabled}
+          sendEvent={sendEvent}
         />
       </div>
     </>
@@ -252,7 +255,7 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const results = useInstantSearch();
-  const { items } = useHits();
+  const { items, sendEvent } = useHits();
   const { showChat, setShowChat, handleShowChat } = useSearchState();
 
   // Lift chat state here to thread isGenerating to the SearchInput
@@ -275,6 +278,14 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   } = useKeyboardNavigation(showChat, items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
+    // Send click event for keyboard navigation before activating
+    if (selectedIndex > 0) {
+      const hit = items[selectedIndex - 1];
+      if (hit) {
+        sendEvent?.("click", hit, "Hit Clicked");
+      }
+    }
+
     if (activateSelection()) {
       if (selectedIndex === 0) {
         handleShowChat(true);
@@ -282,7 +293,7 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
       return true;
     }
     return false;
-  }, [activateSelection, selectedIndex, handleShowChat]);
+  }, [activateSelection, selectedIndex, handleShowChat, items, sendEvent]);
 
   const showResultsPanel = (!noResults && !!query) || showChat;
 
@@ -332,6 +343,7 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
             sendMessage={sendMessage}
             onHoverIndex={hoverIndex}
             scrollOnSelectionChange={selectionOrigin !== "pointer"}
+            sendEvent={sendEvent}
           />
         )}
         {noResults && query && !showChat && (

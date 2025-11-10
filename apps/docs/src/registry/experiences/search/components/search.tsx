@@ -213,6 +213,7 @@ interface HitsListProps {
   attributes: HitsAttributesMapping;
   onHoverIndex?: (index: number) => void;
   hoverEnabled?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const HitsList = memo(function HitsList({
@@ -221,6 +222,7 @@ const HitsList = memo(function HitsList({
   attributes,
   onHoverIndex,
   hoverEnabled,
+  sendEvent,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
@@ -256,6 +258,9 @@ const HitsList = memo(function HitsList({
             className="flex flex-row items-center gap-4 cursor-pointer text-decoration-none text-foreground bg-background rounded-sm p-4 aria-selected:bg-blue-50 dark:aria-selected:bg-slate-900 animate-in fade-in-0 zoom-in-95"
             role="option"
             aria-selected={isSel}
+            onClick={() => {
+              sendEvent?.("click", hit, "Hit Clicked");
+            }}
             onMouseEnter={() => {
               if (!hoverEnabled) return;
               onHoverIndex?.(idx);
@@ -489,6 +494,7 @@ interface ResultsPanelProps {
   config: SearchConfig;
   onHoverIndex?: (index: number) => void;
   scrollOnSelectionChange?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const ResultsPanel = memo(function ResultsPanel({
@@ -497,6 +503,7 @@ const ResultsPanel = memo(function ResultsPanel({
   config,
   onHoverIndex,
   scrollOnSelectionChange = true,
+  sendEvent,
 }: ResultsPanelProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -549,6 +556,7 @@ const ResultsPanel = memo(function ResultsPanel({
           attributes={config.attributes}
           onHoverIndex={onHoverIndex}
           hoverEnabled={hoverEnabled}
+          sendEvent={sendEvent}
         />
       </div>
     </>
@@ -565,7 +573,7 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const results = useInstantSearch();
-  const { items } = useHits();
+  const { items, sendEvent } = useHits();
 
   const noResults = results.results?.nbHits === 0;
   const {
@@ -578,11 +586,19 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   } = useKeyboardNavigation(items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
+    // Send click event for keyboard navigation before activating
+    if (selectedIndex >= 0 && selectedIndex < items.length) {
+      const hit = items[selectedIndex];
+      if (hit) {
+        sendEvent?.("click", hit, "Hit Clicked");
+      }
+    }
+
     if (activateSelection()) {
       return true;
     }
     return false;
-  }, [activateSelection]);
+  }, [activateSelection, selectedIndex, items, sendEvent]);
 
   const showResultsPanel = !noResults && !!query;
 
@@ -613,6 +629,7 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
             config={config}
             onHoverIndex={hoverIndex}
             scrollOnSelectionChange={selectionOrigin !== "pointer"}
+            sendEvent={sendEvent}
           />
         )}
         {noResults && query && (

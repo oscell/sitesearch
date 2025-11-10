@@ -59,6 +59,7 @@ interface HitsListProps {
   attributes?: HitsAttributesMapping;
   onHoverIndex?: (index: number) => void;
   hoverEnabled?: boolean;
+  sendEvent?: (eventType: "click", hit: SearchHit, eventName: string) => void;
 }
 
 export const HitsList = memo(function HitsList({
@@ -69,6 +70,7 @@ export const HitsList = memo(function HitsList({
   attributes,
   onHoverIndex,
   hoverEnabled,
+  sendEvent,
 }: HitsListProps) {
   const mapping: Required<Pick<HitsAttributesMapping, "primaryText">> &
     Partial<HitsAttributesMapping> = useMemo(
@@ -99,6 +101,9 @@ export const HitsList = memo(function HitsList({
             className="ss-infinite-hits-item ss-infinite-hits-anchor"
             role="option"
             aria-selected={isSel}
+            onClick={() => {
+              sendEvent?.("click", hit, "Hit Clicked");
+            }}
             onMouseEnter={() => {
               if (!hoverEnabled) return;
               onHoverIndex?.(idx + 1);

@@ -453,7 +453,7 @@ const MemoizedMarkdown = memo(function MemoizedMarkdown({
         [&_h5]:font-semibold [&_h5]:leading-tight [&_h5]:mb-2 [&_h5]:text-foreground [&_h5]:text-base
         [&_h6]:font-semibold [&_h6]:leading-tight [&_h6]:mb-2 [&_h6]:text-foreground [&_h6]:text-base
         [&_p]:p-0 [&_p]:my-2 [&_p:last-child]:mb-0
-        [&_a]:text-blue-600 [&_a]:no-underline [&_a]:border-b [&_a]:border-transparent [&_a]:transition-all [&_a]:duration-200 [&_a:hover]:border-blue-600 [&_a:hover]:bg-blue-50
+        [&_a]:text-blue-600 [&_a]:no-underline [&_a]:border-b [&_a]:border-transparent [&_a]:transition-all [&_a]:duration-200 [&_a:hover]:border-blue-600 [&_a:hover]:bg-blue-50 dark:[&_a:hover]:bg-slate-900
         [&_ul]:ps-6 [&_ul]:mt-0 [&_ul]:mb-0 [&_ul]:list-disc
         [&_ol]:ps-6 [&_ol]:mt-0 [&_ol]:mb-0 [&_ol]:list-decimal
         [&_li]:mb-1 [&_li::marker]:text-muted-foreground
@@ -464,7 +464,7 @@ const MemoizedMarkdown = memo(function MemoizedMarkdown({
         [&_.markdown-code-snippet_code]:bg-transparent [&_.markdown-code-snippet_code]:text-foreground [&_.markdown-code-snippet_code]:p-0 [&_.markdown-code-snippet_code]:border-none
         [&_.markdown-copy-button]:absolute [&_.markdown-copy-button]:top-2 [&_.markdown-copy-button]:right-2 [&_.markdown-copy-button]:flex [&_.markdown-copy-button]:items-center [&_.markdown-copy-button]:gap-1 [&_.markdown-copy-button]:px-3 [&_.markdown-copy-button]:py-1.5 [&_.markdown-copy-button]:bg-background [&_.markdown-copy-button]:border [&_.markdown-copy-button]:border-border [&_.markdown-copy-button]:rounded-md [&_.markdown-copy-button]:text-xs [&_.markdown-copy-button]:cursor-pointer [&_.markdown-copy-button]:transition-all [&_.markdown-copy-button]:duration-200 [&_.markdown-copy-button]:text-foreground [&_.markdown-copy-button]:opacity-0 [&_.markdown-copy-button]:-translate-y-1
         [&_.markdown-code-snippet:hover_.markdown-copy-button]:opacity-100 [&_.markdown-code-snippet:hover_.markdown-copy-button]:translate-y-0
-        [&_.markdown-copy-button:hover]:bg-accent [&_.markdown-copy-button:hover]:shadow-sm
+        [&_.markdown-copy-button:hover]:bg-blue-50 dark:[&_.markdown-copy-button:hover]:bg-slate-900 [&_.markdown-copy-button:hover]:shadow-sm
         [&_.markdown-copy-button_.markdown-check-icon]:hidden
         [&_.markdown-copy-button.markdown-copied_.markdown-copy-icon]:hidden
         [&_.markdown-copy-button.markdown-copied_.markdown-check-icon]:block
@@ -476,7 +476,7 @@ const MemoizedMarkdown = memo(function MemoizedMarkdown({
         [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:font-semibold [&_th]:text-foreground [&_th]:border-b-2 [&_th]:border-border
         [&_td]:px-4 [&_td]:py-3 [&_td]:border-b [&_td]:border-border [&_td]:text-foreground
         [&_tr:last-child_td]:border-b-0
-        [&_tbody_tr:hover]:bg-accent
+        [&_tbody_tr:hover]:bg-blue-50 dark:[&_tbody_tr:hover]:bg-slate-900
         [&_blockquote]:border-l-4 [&_blockquote]:border-blue-600 [&_blockquote]:my-4 [&_blockquote]:py-2 [&_blockquote]:px-4 [&_blockquote]:bg-blue-50 [&_blockquote]:text-foreground [&_blockquote]:italic
         [&_blockquote_p]:mb-2 [&_blockquote_p:last-child]:mb-0
         [&_strong]:font-semibold [&_strong]:text-foreground
@@ -714,7 +714,7 @@ const ChatWidget = memo(function ChatWidget({
                           type="button"
                           title="Like"
                           aria-label="Like"
-                          className="border-none bg-transparent rounded-md px-2.5 py-1.5 text-muted-foreground cursor-pointer flex items-center justify-center gap-2 transition-all duration-150 hover:bg-accent disabled:text-foreground disabled:cursor-not-allowed"
+                          className="border-none bg-transparent rounded-md px-2.5 py-1.5 text-muted-foreground cursor-pointer flex items-center justify-center gap-2 transition-all duration-150 hover:bg-blue-50 dark:hover:bg-slate-900 disabled:text-foreground disabled:cursor-not-allowed"
                           disabled={
                             !exchange.assistantMessage ||
                             submittingExchangeId === exchange.id
@@ -751,7 +751,7 @@ const ChatWidget = memo(function ChatWidget({
                           type="button"
                           title="Dislike"
                           aria-label="Dislike"
-                          className="border-none bg-transparent rounded-md px-2.5 py-1.5 text-muted-foreground cursor-pointer flex items-center justify-center gap-2 transition-all duration-150 hover:bg-accent disabled:text-foreground disabled:cursor-not-allowed"
+                          className="border-none bg-transparent rounded-md px-2.5 py-1.5 text-muted-foreground cursor-pointer flex items-center justify-center gap-2 transition-all duration-150 hover:bg-blue-50 dark:hover:bg-slate-900 disabled:text-foreground disabled:cursor-not-allowed"
                           disabled={
                             !exchange.assistantMessage ||
                             submittingExchangeId === exchange.id
@@ -789,9 +789,9 @@ const ChatWidget = memo(function ChatWidget({
                   ) : null}
                   <button
                     type="button"
-                    className={`border-none bg-transparent rounded-md px-2.5 py-1.5 text-muted-foreground cursor-pointer flex items-center justify-center gap-2 transition-all duration-150 hover:bg-accent disabled:text-foreground disabled:cursor-not-allowed ${
+                    className={`border-none bg-transparent rounded-md px-2.5 py-1.5 text-muted-foreground cursor-pointer flex items-center justify-center gap-2 transition-all duration-150 hover:bg-blue-50 dark:hover:bg-slate-900 disabled:text-foreground disabled:cursor-not-allowed ${
                       copiedExchangeId === exchange.id
-                        ? "bg-accent text-blue-600 -translate-y-px"
+                        ? "bg-blue-50 dark:bg-slate-900 text-blue-600 -translate-y-px"
                         : ""
                     }`}
                     aria-label={
@@ -872,7 +872,7 @@ const HitsActions = memo(function HitsActions({
     <div className="list-none p-0 m-0 animate-in fade-in-0 slide-in-from-top-1">
       <article
         onClick={onAskAI}
-        className="my-1 p-3 rounded-lg bg-background flex items-center gap-4 cursor-pointer select-none whitespace-nowrap transition-all duration-150 aria-selected:bg-accent aria-selected:shadow-lg aria-selected:-translate-y-px"
+        className="my-1 p-3 rounded-lg bg-background flex items-center gap-4 cursor-pointer select-none whitespace-nowrap transition-all duration-150 hover:bg-blue-50 hover:shadow-lg hover:-translate-y-px aria-selected:bg-blue-50 aria-selected:shadow-lg aria-selected:-translate-y-px dark:hover:bg-slate-900 dark:aria-selected:bg-slate-900"
         aria-label="Ask AI"
         title="Ask AI"
         // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: hand crafted
@@ -907,6 +907,7 @@ interface HitsListProps {
   attributes: HitsAttributesMapping;
   onHoverIndex?: (index: number) => void;
   hoverEnabled?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const HitsList = memo(function HitsList({
@@ -917,6 +918,7 @@ const HitsList = memo(function HitsList({
   attributes,
   onHoverIndex,
   hoverEnabled,
+  sendEvent,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
@@ -957,9 +959,12 @@ const HitsList = memo(function HitsList({
             href={url ?? "#"}
             target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
-            className={`my-1 p-4 rounded-lg bg-background gap-4 cursor-pointer no-underline text-foreground transition-all duration-150 block aria-selected:bg-accent aria-selected:border-border aria-selected:shadow-lg aria-selected:-translate-y-px animate-in fade-in-0 zoom-in-95 ${hasImage ? "flex flex-row items-center gap-4" : ""}`}
+            className={`my-1 p-4 rounded-lg bg-background gap-4 cursor-pointer no-underline text-foreground transition-all duration-150 block hover:bg-blue-50 hover:border-border hover:shadow-lg hover:-translate-y-px aria-selected:bg-blue-50 aria-selected:border-border aria-selected:shadow-lg aria-selected:-translate-y-px dark:hover:bg-slate-900 dark:aria-selected:bg-slate-900 animate-in fade-in-0 zoom-in-95 ${hasImage ? "flex flex-row items-center gap-4" : ""}`}
             role="option"
             aria-selected={isSel}
+            onClick={() => {
+              sendEvent?.("click", hit, "Hit Clicked");
+            }}
             onMouseEnter={() => {
               if (!hoverEnabled) return;
               onHoverIndex?.(idx + 1);
@@ -1216,7 +1221,7 @@ const NoResults = memo(function NoResults({
 }: NoResultsProps) {
   return (
     <div className="flex flex-col items-center text-center justify-center gap-2 bg-muted p-8 h-[50vh] text-foreground">
-      <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent text-muted-foreground">
+      <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-slate-900 text-muted-foreground">
         <SearchIcon size={22} />
       </div>
       <p className="m-0 font-normal text-base">
@@ -1256,6 +1261,7 @@ interface ResultsPanelProps {
   sendMessage: (options: { text: string }) => void | Promise<void>;
   onHoverIndex?: (index: number) => void;
   scrollOnSelectionChange?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const ResultsPanel = memo(function ResultsPanel({
@@ -1272,6 +1278,7 @@ const ResultsPanel = memo(function ResultsPanel({
   sendMessage,
   onHoverIndex,
   scrollOnSelectionChange = true,
+  sendEvent,
 }: ResultsPanelProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1352,6 +1359,7 @@ const ResultsPanel = memo(function ResultsPanel({
           attributes={config.attributes}
           onHoverIndex={onHoverIndex}
           hoverEnabled={hoverEnabled}
+          sendEvent={sendEvent}
         />
       </div>
     </>
@@ -1487,7 +1495,7 @@ function SearchModal({ onClose, config }: SearchModalProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const results = useInstantSearch();
-  const { items } = useHits();
+  const { items, sendEvent } = useHits();
   const { showChat, setShowChat, handleShowChat } = useSearchState();
 
   const { messages, error, isGenerating, sendMessage } = useAskai({
@@ -1509,6 +1517,14 @@ function SearchModal({ onClose, config }: SearchModalProps) {
   } = useKeyboardNavigation(showChat, items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
+    // Send click event for keyboard navigation before activating
+    if (selectedIndex > 0) {
+      const hit = items[selectedIndex - 1];
+      if (hit) {
+        sendEvent?.("click", hit, "Hit Clicked");
+      }
+    }
+
     if (activateSelection()) {
       if (selectedIndex === 0) {
         handleShowChat(true);
@@ -1516,7 +1532,7 @@ function SearchModal({ onClose, config }: SearchModalProps) {
       return true;
     }
     return false;
-  }, [activateSelection, selectedIndex, handleShowChat]);
+  }, [activateSelection, selectedIndex, handleShowChat, items, sendEvent]);
 
   const showResultsPanel = (!noResults && !!query) || showChat;
 
@@ -1564,6 +1580,7 @@ function SearchModal({ onClose, config }: SearchModalProps) {
             sendMessage={sendMessage}
             onHoverIndex={hoverIndex}
             scrollOnSelectionChange={selectionOrigin !== "pointer"}
+            sendEvent={sendEvent}
           />
         )}
         {noResults && query && !showChat && (

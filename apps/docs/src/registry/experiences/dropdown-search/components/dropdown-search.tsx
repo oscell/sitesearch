@@ -84,6 +84,7 @@ interface HitsListProps {
   onItemClick?: () => void;
   onHoverIndex?: (index: number) => void;
   hoverEnabled?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const HitsList = memo(function HitsList({
@@ -93,6 +94,7 @@ const HitsList = memo(function HitsList({
   onItemClick,
   onHoverIndex,
   hoverEnabled,
+  sendEvent,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
@@ -125,7 +127,10 @@ const HitsList = memo(function HitsList({
             href={url ?? "#"}
             target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
-            onClick={onItemClick}
+            onClick={() => {
+              sendEvent?.("click", hit, "Hit Clicked");
+              onItemClick?.();
+            }}
             className="flex flex-row items-center gap-3 cursor-pointer text-decoration-none text-foreground bg-background rounded-sm p-3 aria-selected:bg-accent transition-colors"
             role="option"
             aria-selected={isSel}
@@ -259,6 +264,7 @@ interface DropdownContentProps {
   onItemClick?: () => void;
   onHoverIndex?: (index: number) => void;
   scrollOnSelectionChange?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const DropdownContent = memo(function DropdownContent({
@@ -268,6 +274,7 @@ const DropdownContent = memo(function DropdownContent({
   onItemClick,
   onHoverIndex,
   scrollOnSelectionChange = true,
+  sendEvent,
 }: DropdownContentProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -333,6 +340,7 @@ const DropdownContent = memo(function DropdownContent({
         onItemClick={onItemClick}
         onHoverIndex={onHoverIndex}
         hoverEnabled={hoverEnabled}
+        sendEvent={sendEvent}
       />
     </div>
   );
@@ -345,7 +353,7 @@ interface DropdownSearchInnerProps {
 function DropdownSearchInner({ config }: DropdownSearchInnerProps) {
   const { query, refine } = useSearchBox();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { items } = useHits();
+  const { items, sendEvent } = useHits();
   const [open, setOpen] = useState(false);
 
   const {
@@ -363,13 +371,21 @@ function DropdownSearchInner({ config }: DropdownSearchInnerProps) {
   }, [query]);
 
   const handleActivateSelection = useCallback((): boolean => {
+    // Send click event for keyboard navigation before activating
+    if (selectedIndex >= 0 && selectedIndex < items.length) {
+      const hit = items[selectedIndex];
+      if (hit) {
+        sendEvent?.("click", hit, "Hit Clicked");
+      }
+    }
+
     if (activateSelection()) {
       setOpen(false);
       refine("");
       return true;
     }
     return false;
-  }, [activateSelection, refine]);
+  }, [activateSelection, refine, selectedIndex, items, sendEvent]);
 
   const handleItemClick = useCallback(() => {
     setOpen(false);
@@ -414,6 +430,7 @@ function DropdownSearchInner({ config }: DropdownSearchInnerProps) {
                 onItemClick={handleItemClick}
                 onHoverIndex={hoverIndex}
                 scrollOnSelectionChange={selectionOrigin !== "pointer"}
+                sendEvent={sendEvent}
               />
             ) : (
               <div className="p-4 text-center text-sm text-muted-foreground">

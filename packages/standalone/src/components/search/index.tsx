@@ -105,6 +105,7 @@ interface ResultsPanelProps {
   config: SearchConfig;
   onHoverIndex?: (index: number) => void;
   scrollOnSelectionChange?: boolean;
+  sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
 }
 
 const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
@@ -113,6 +114,7 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
   config,
   onHoverIndex,
   scrollOnSelectionChange = true,
+  sendEvent,
 }) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -162,6 +164,7 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
           attributes={config.attributes}
           onHoverIndex={onHoverIndex}
           hoverEnabled={hoverEnabled}
+          sendEvent={sendEvent}
         />
       </div>
     </>
@@ -178,7 +181,7 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const results = useInstantSearch();
-  const { items } = useHits();
+  const { items, sendEvent } = useHits();
 
   const noResults = results.results?.nbHits === 0;
   const {
@@ -191,11 +194,19 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   } = useKeyboardNavigation(items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
+    // Send click event for keyboard navigation before activating
+    if (selectedIndex >= 0 && selectedIndex < items.length) {
+      const hit = items[selectedIndex];
+      if (hit) {
+        sendEvent?.("click", hit, "Hit Clicked");
+      }
+    }
+
     if (activateSelection()) {
       return true;
     }
     return false;
-  }, [activateSelection]);
+  }, [activateSelection, selectedIndex, items, sendEvent]);
 
   const showResultsPanel = !noResults && !!query;
 
@@ -226,6 +237,7 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
             config={config}
             onHoverIndex={hoverIndex}
             scrollOnSelectionChange={selectionOrigin !== "pointer"}
+            sendEvent={sendEvent}
           />
         )}
         {noResults && query && (
