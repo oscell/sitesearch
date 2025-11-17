@@ -5,6 +5,7 @@ import DropdownSearch from "@/registry/experiences/dropdown-search/components/dr
 import { HighlightAskAI } from "@/registry/experiences/highlight-to-askai/components/highlight-to-askai";
 import Search from "@/registry/experiences/search/components/search";
 import SearchWithAskAi from "@/registry/experiences/search-askai/components/search-ai";
+import SidepanelExperience from "@/registry/experiences/sidepanel-askai/components/sidepanel-askai";
 import { CopyCodeButton } from "./copy-code-button";
 import { OpenInV0Button } from "./open-in-v0";
 import { GridPattern } from "./ui/grid-pattern";
@@ -42,6 +43,7 @@ export function PreviewSiteSearch() {
           hitsPerPage={6}
           keyboardShortcut="cmd+k"
           buttonText="🎧 Search Podcasts"
+          suggestedQuestionsEnabled={true}
           attributes={{
             primaryText: "title",
             secondaryText: "description",
@@ -196,6 +198,55 @@ export function PreviewDropdownSearch() {
               image: "imageUrl",
               url: "url",
             }}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function PreviewSidepanelAskAI() {
+  return (
+    <>
+      <div className="flex justify-between items-center mb-2 ">
+        <div>
+          <CopyCodeButton
+            code={`npx shadcn@latest add @algolia/sidepanel-askai`}
+            title="Copy install command"
+          ></CopyCodeButton>
+        </div>
+        <div>
+          <OpenInV0Button name="sidepanel-askai"></OpenInV0Button>
+        </div>
+      </div>
+      <div className="bg-background relative flex h-[400px] items-center justify-center overflow-hidden rounded-lg border p-20">
+        <GridPattern
+          width={40}
+          height={40}
+          x={-1}
+          y={-1}
+          className={cn(
+            "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]",
+          )}
+        />
+        <div className="flex gap-4">
+          <SidepanelExperience
+            applicationId="06YAZFOHSQ"
+            apiKey="94b6afdc316917b6e6cdf2763fa561df"
+            indexName="algolia_podcast_sample_dataset"
+            assistantId="UpR727VnXnoG"
+            buttonText="Ask AI (floating)"
+            variant="floating"
+            suggestedQuestionsEnabled={true}
+          />
+          <SidepanelExperience
+            applicationId="06YAZFOHSQ"
+            apiKey="94b6afdc316917b6e6cdf2763fa561df"
+            indexName="algolia_podcast_sample_dataset"
+            assistantId="UpR727VnXnoG"
+            buttonText="Ask AI (inline)"
+            variant="inline"
+            suggestedQuestionsEnabled={true}
           />
         </div>
       </div>

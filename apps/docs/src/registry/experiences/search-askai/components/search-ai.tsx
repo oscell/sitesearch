@@ -14,6 +14,7 @@ import {
   CornerDownLeftIcon,
   SearchIcon,
   SparklesIcon,
+  SquarePen,
   ThumbsDown,
   ThumbsUp,
 } from "lucide-react";
@@ -46,6 +47,10 @@ import {
 } from "@/registry/experiences/search-askai/hooks/use-askai";
 import { useKeyboardNavigation } from "@/registry/experiences/search-askai/hooks/use-keyboard-navigation";
 import { useSearchState } from "@/registry/experiences/search-askai/hooks/use-search-state";
+import {
+  type SuggestedQuestionHit,
+  useSuggestedQuestions,
+} from "@/registry/experiences/search-askai/hooks/use-suggested-questions";
 
 // ============================================================================
 // Types
@@ -60,8 +65,6 @@ export interface SearchWithAskAIConfig {
   indexName: string;
   /** AI Assistant ID (required for chat functionality) */
   assistantId: string;
-  /** Base URL for AI chat API (optional, defaults to beta endpoint) */
-  baseAskaiUrl?: string;
   /** Placeholder text for search input (optional, defaults to "What are you looking for?") */
   placeholder?: string;
   /** Number of hits per page (optional, defaults to 8) */
@@ -78,6 +81,8 @@ export interface SearchWithAskAIConfig {
   searchParameters?: Record<string, unknown>;
   /** Enable Algolia Insights (optional, defaults to true) */
   insights?: boolean;
+  /** Suggested Questions Enabled (optional, defaults to false) */
+  suggestedQuestionsEnabled?: boolean;
 }
 
 interface SearchButtonProps {
@@ -503,6 +508,8 @@ interface ChatWidgetProps {
   onThumbsDown?: (userMessageId: string) => Promise<void> | void;
   applicationId: string;
   assistantId: string;
+  suggestedQuestions?: SuggestedQuestionHit[];
+  onSuggestedQuestionClick?: (question: string) => void;
 }
 
 const ChatWidget = memo(function ChatWidget({
@@ -514,6 +521,8 @@ const ChatWidget = memo(function ChatWidget({
   onThumbsDown,
   applicationId,
   assistantId,
+  suggestedQuestions,
+  onSuggestedQuestionClick,
 }: ChatWidgetProps) {
   const { copyText } = useClipboard();
   const [copiedExchangeId, setCopiedExchangeId] = useState<string | null>(null);
@@ -565,9 +574,45 @@ const ChatWidget = memo(function ChatWidget({
   return (
     <div className="flex flex-col h-[91vh] md:h-[50vh] p-4 bg-muted overflow-y-auto">
       <div className="flex flex-col gap-4">
-        <p className="text-sm m-0 text-muted-foreground">
-          Answers are generated using AI and may make mistakes.
-        </p>
+        {exchanges.length === 0 ? (
+          <>
+            <div className="flex flex-col gap-4 py-2">
+              <h2 className="text-2xl font-semibold text-foreground m-0">
+                How can I help you today?
+              </h2>
+              <p className="text-muted-foreground m-0">
+                I search through your content to help you find answers to your
+                questions, fast.
+              </p>
+              {suggestedQuestions && suggestedQuestions.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {suggestedQuestions.map((question) => (
+                    <Button
+                      key={question.objectID}
+                      type="button"
+                      variant="outline"
+                      className="cursor-pointer text-left"
+                      disabled={isGenerating}
+                      onClick={() => {
+                        if (isGenerating) return;
+                        onSuggestedQuestionClick?.(question.question);
+                      }}
+                    >
+                      {question.question}
+                    </Button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+            <p className="text-sm m-0 text-muted-foreground">
+              Answers are generated using AI and may make mistakes.
+            </p>
+          </>
+        ) : (
+          <p className="text-sm m-0 text-muted-foreground">
+            Answers are generated using AI and may make mistakes.
+          </p>
+        )}
         {/* errors */}
         {error && (
           <div className="border border-red-300 bg-red-100 text-red-900 px-4 py-3 rounded-lg">
@@ -1038,6 +1083,7 @@ interface SearchInputProps {
   onArrowDown?: () => void;
   onArrowUp?: () => void;
   onEnter?: (value: string) => boolean;
+  onNewChat?: () => void;
 }
 
 const SearchLeftButton = memo(function SearchLeftButton({
@@ -1063,7 +1109,6 @@ const SearchLeftButton = memo(function SearchLeftButton({
 
   return (
     <div
-      // biome-ignore lint/a11y/useSemanticElements: hand crafted
       role="button"
       tabIndex={-1}
       className="p-2 rounded-full flex items-center justify-center text-muted-foreground has-[+input:focus]:text-blue-600"
@@ -1191,6 +1236,19 @@ const SearchInput = memo(function SearchInput(props: SearchInputProps) {
         >
           Clear
         </Button>
+        {props.showChat ? (
+          <Button
+            type="button"
+            variant="ghost"
+            disabled={props.isGenerating}
+            onClick={() => {
+              setChatInput("");
+              props.onNewChat?.();
+            }}
+          >
+            <SquarePen size={18} />
+          </Button>
+        ) : null}
         <Button
           type="button"
           variant="outline"
@@ -1262,6 +1320,7 @@ interface ResultsPanelProps {
   onHoverIndex?: (index: number) => void;
   scrollOnSelectionChange?: boolean;
   sendEvent?: (eventType: "click", hit: any, eventName: string) => void;
+  suggestedQuestions?: SuggestedQuestionHit[];
 }
 
 const ResultsPanel = memo(function ResultsPanel({
@@ -1279,6 +1338,7 @@ const ResultsPanel = memo(function ResultsPanel({
   onHoverIndex,
   scrollOnSelectionChange = true,
   sendEvent,
+  suggestedQuestions,
 }: ResultsPanelProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1332,6 +1392,23 @@ const ResultsPanel = memo(function ResultsPanel({
     lastSentRef.current = trimmed;
   }, [showChat, query, inputRef, sendMessage, refine]);
 
+  useEffect(() => {
+    if ((messages as Message[]).length === 0) {
+      lastSentRef.current = null;
+    }
+  }, [messages]);
+
+  const handleSuggestedQuestionClick = useCallback(
+    (question: string) => {
+      const trimmed = question.trim();
+      if (!trimmed || isGenerating) {
+        return;
+      }
+      sendMessage({ text: trimmed });
+    },
+    [sendMessage, isGenerating],
+  );
+
   if (showChat) {
     return (
       <ChatWidget
@@ -1340,6 +1417,8 @@ const ResultsPanel = memo(function ResultsPanel({
         isGenerating={isGenerating}
         applicationId={config.applicationId}
         assistantId={config.assistantId}
+        suggestedQuestions={suggestedQuestions}
+        onSuggestedQuestionClick={handleSuggestedQuestionClick}
       />
     );
   }
@@ -1383,6 +1462,7 @@ interface SearchBoxProps {
   onArrowDown?: () => void;
   onArrowUp?: () => void;
   onEnter?: (value: string) => boolean;
+  onNewChat?: () => void;
 }
 
 const SearchBox = memo(function SearchBox(props: SearchBoxProps) {
@@ -1398,6 +1478,7 @@ const SearchBox = memo(function SearchBox(props: SearchBoxProps) {
       onArrowDown={props.onArrowDown}
       onArrowUp={props.onArrowUp}
       onEnter={props.onEnter}
+      onNewChat={props.onNewChat}
     />
   );
 });
@@ -1498,12 +1579,24 @@ function SearchModal({ onClose, config }: SearchModalProps) {
   const { items, sendEvent } = useHits();
   const { showChat, setShowChat, handleShowChat } = useSearchState();
 
-  const { messages, error, isGenerating, sendMessage } = useAskai({
+  const { messages, setMessages, error, isGenerating, sendMessage } = useAskai({
     applicationId: config.applicationId,
     apiKey: config.apiKey,
     indexName: config.indexName,
     assistantId: config.assistantId,
-    baseAskaiUrl: config.baseAskaiUrl,
+  });
+
+  const suggestedQuestionsClient = useMemo(() => {
+    const client = algoliasearch(config.applicationId, config.apiKey);
+    client.addAlgoliaAgent("algolia-sitesearch");
+    return client;
+  }, [config.applicationId, config.apiKey]);
+
+  const suggestedQuestions = useSuggestedQuestions({
+    searchClient: suggestedQuestionsClient,
+    assistantId: config.assistantId,
+    suggestedQuestionsEnabled: config.suggestedQuestionsEnabled ?? false,
+    isOpen: showChat,
   });
 
   const noResults = results.results?.nbHits === 0;
@@ -1536,6 +1629,15 @@ function SearchModal({ onClose, config }: SearchModalProps) {
 
   const showResultsPanel = (!noResults && !!query) || showChat;
 
+  const handleNewChat = useCallback(() => {
+    setMessages?.([]);
+    setShowChat(true);
+    refine("");
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [setMessages, setShowChat, refine]);
+
   return (
     <>
       <Configure
@@ -1562,6 +1664,7 @@ function SearchModal({ onClose, config }: SearchModalProps) {
             return handleActivateSelection();
           }}
           inputRef={inputRef}
+          onNewChat={handleNewChat}
         />
         {showResultsPanel && (
           <ResultsPanel
@@ -1581,6 +1684,7 @@ function SearchModal({ onClose, config }: SearchModalProps) {
             onHoverIndex={hoverIndex}
             scrollOnSelectionChange={selectionOrigin !== "pointer"}
             sendEvent={sendEvent}
+            suggestedQuestions={suggestedQuestions}
           />
         )}
         {noResults && query && !showChat && (
@@ -1608,8 +1712,11 @@ function SearchModal({ onClose, config }: SearchModalProps) {
 // ============================================================================
 
 export default function SearchExperience(config: SearchWithAskAIConfig) {
-  const searchClient = algoliasearch(config.applicationId, config.apiKey);
-  searchClient.addAlgoliaAgent("algolia-sitesearch");
+  const searchClient = useMemo(() => {
+    const client = algoliasearch(config.applicationId, config.apiKey);
+    client.addAlgoliaAgent("algolia-sitesearch");
+    return client;
+  }, [config.applicationId, config.apiKey]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
