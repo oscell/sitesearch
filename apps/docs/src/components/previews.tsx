@@ -2,13 +2,16 @@
 
 import { cn } from "@/lib/utils";
 import DropdownSearch from "@/registry/experiences/dropdown-search/components/dropdown-search";
-import { HighlightAskAI } from "@/registry/experiences/highlight-to-askai/components/highlight-to-askai";
+import HighlightAskAI from "@/registry/experiences/highlight-to-askai/components/highlight-to-askai";
 import Search from "@/registry/experiences/search/components/search";
 import SearchWithAskAi from "@/registry/experiences/search-askai/components/search-ai";
 import SidepanelExperience from "@/registry/experiences/sidepanel-askai/components/sidepanel-askai";
+import CurationAgent  from "@/registry/experiences/curation-agent/components/curation-agent";
+
 import { CopyCodeButton } from "./copy-code-button";
 import { OpenInV0Button } from "./open-in-v0";
 import { GridPattern } from "./ui/grid-pattern";
+
 
 export function PreviewSiteSearch() {
   return (
@@ -248,6 +251,46 @@ export function PreviewSidepanelAskAI() {
             variant="inline"
             suggestedQuestionsEnabled={true}
           />
+        </div>
+      </div>
+    </>
+  );
+}
+
+
+export function PreviewCurationAgent() {
+  return (
+    <>
+      <div className="flex justify-between items-center mb-2 ">
+        <div>
+          <CopyCodeButton
+            code={`npx shadcn@latest add @algolia/curation-agent`}
+            title="Copy install command"
+          ></CopyCodeButton>
+        </div>
+        <div>
+          <OpenInV0Button name="curation-agent"></OpenInV0Button>
+        </div>
+      </div>
+      <div className="bg-background relative flex h-[400px] items-center justify-center overflow-hidden rounded-lg border p-20">
+        <GridPattern
+          width={40}
+          height={40}
+          x={-1}
+          y={-1}
+          className={cn(
+            "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]"
+          )}
+        />
+        <div className="w-full max-w-3xl">
+          <CurationAgent
+            applicationId="CCZC5HO11D"
+            apiKey="84cbfc5e6c70757b7616e57cf0eba535"
+            agentId="e9d7a2bb-8e10-4168-a6a7-6c2a2d3e8ddd"
+          />
+          <p className="mt-2 text-right text-xs opacity-60">
+            Tip: Try selecting a sentence across multiple lines.
+          </p>
         </div>
       </div>
     </>
