@@ -9,7 +9,6 @@ import {
   ToolCallOutput,
   useAgentStudio,
 } from "../hooks/use-agent-studio";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { UIMessage } from "@ai-sdk/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +19,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
 
 export type CurationAgentProps = {
   applicationId: string;
@@ -89,16 +89,6 @@ const AlgoliaLogo = ({ size = 52 }: { size?: number | string }) => (
     />
   </svg>
 );
-
-function LoadingSkeleton({ count = 4 }: { count?: number }) {
-  return (
-    <div className="flex flex-row gap-2 items-center justify-center my-4">
-      {Array.from({ length: count }).map((_, i) => (
-        <Skeleton key={i} className="w-32 h-32 rounded-full" />
-      ))}
-    </div>
-  );
-}
 
 export function CurationAgent({
   applicationId,
@@ -184,7 +174,7 @@ export function CurationAgent({
         <img
           src={subject.image}
           alt={subject.title}
-          className="object-cover w-40 h-40 overflow-hidden rounded shadow-lg shadow-foreground"
+          className="object-contain object-center w-40 h-40 overflow-hidden rounded shadow-lg shadow-foreground bg-white"
         />
         <div className="text-sm font-medium text-center line-clamp-2">
           {subject.title}
@@ -192,104 +182,100 @@ export function CurationAgent({
       </aside>
 
       {/* RIGHT: Interactive panel */}
+
       <section className="flex-1 min-w-0">
-        <Input
-          type="text"
-          placeholder="What are you looking for?"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              sendMessage({ text: (e.target as HTMLInputElement).value });
-            }
-          }}
-          disabled={isGenerating}
-        />
+        <Tabs value={tab} onValueChange={setTab} className="w-full">
+          {/* Top row: button (left) + tabs (right) */}
+          <div className="flex items-center gap-2">
+            <Button
+              disabled={isGenerating}
+              onClick={() =>
+                sendMessage({
+                  text: `Generate combinations for ${JSON.stringify(subject)}`,
+                })
+              }
+            >
+              Generate
+            </Button>
 
-        {/* Loading state */}
-
-        {/* Combinations – subject remains visible at left */}
-        {(hasOutput || !isGenerating) && (
-          <div className="mt-3">
-            {/* REPLACE your <Tabs ...> block with this */}
-
-            <Tabs value={tab} onValueChange={setTab} className="w-full">
-              <TabsList className="flex flex-row gap-2">
-                {!hasOutput ? (
-                  <>
-                    <TabsTrigger value="loading-1">combination 1</TabsTrigger>
-                    <TabsTrigger value="loading-2">combination 2</TabsTrigger>
-                  </>
-                ) : (
-                  combinations.map((combination) => (
-                    <TabsTrigger key={combination.key} value={combination.key}>
-                      {combination.title}
-                    </TabsTrigger>
-                  ))
-                )}
-              </TabsList>
-
-              {/* Loading state now lives in TabsContent, so layout matches populated */}
+            <TabsList className="ml-auto flex flex-row flex-wrap gap-2">
               {!hasOutput ? (
                 <>
-                  <TabsContent value="loading-1" className="mt-0">
-                    <Carousel className="w-full relative">
-                      <CarouselContent className="-ml-2">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                          <CarouselItem key={i} className="pl-2 basis-1/3">
-                            <Skeleton className="w-32 h-32 rounded" />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <CarouselPrevious className="left-0" />
-                      <CarouselNext className="right-0" />
-                    </Carousel>
-                  </TabsContent>
-
-                  <TabsContent value="loading-2" className="mt-0">
-                    <Carousel className="w-full relative">
-                      <CarouselContent className="-ml-2">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                          <CarouselItem key={i} className="pl-2 basis-1/3">
-                            <Skeleton className="w-32 h-32 rounded" />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <CarouselPrevious className="left-0" />
-                      <CarouselNext className="right-0" />
-                    </Carousel>
-                  </TabsContent>
+                  <TabsTrigger value="loading-1">combination 1</TabsTrigger>
+                  <TabsTrigger value="loading-2">combination 2</TabsTrigger>
                 </>
               ) : (
                 combinations.map((combination) => (
-                  <TabsContent
-                    key={combination.key}
-                    value={combination.key}
-                    className="mt-0"
-                  >
-                    <Carousel className="w-full relative">
-                      <CarouselContent className="-ml-2">
-                        {combination.items.map((item) => (
-                          <CarouselItem
-                            key={item.objectID}
-                            className="pl-2 basis-1/3"
-                          >
-                            <img
-                              src={item.imageUrl}
-                              alt={item.name}
-                              className="w-32 h-32 rounded object-cover mt-0 mb-0"
-                            />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <CarouselPrevious className="left-0" />
-                      <CarouselNext className="right-0" />
-                    </Carousel>
-                  </TabsContent>
+                  <TabsTrigger key={combination.key} value={combination.key}>
+                    {combination.title}
+                  </TabsTrigger>
                 ))
               )}
-            </Tabs>
+            </TabsList>
           </div>
-        )}
+
+          {/* Second row: images */}
+          {!isGenerating ? (
+            !hasOutput ? (
+              <>
+                <TabsContent value="loading-1" className="mt-2">
+                  <Carousel className="w-full relative">
+                    <CarouselContent className="-ml-2">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <CarouselItem key={i} className="pl-2 basis-1/3">
+                          <Skeleton className="w-32 h-32 rounded" />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-0" />
+                    <CarouselNext className="right-0" />
+                  </Carousel>
+                </TabsContent>
+
+                <TabsContent value="loading-2" className="mt-2">
+                  <Carousel className="w-full relative">
+                    <CarouselContent className="-ml-2">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <CarouselItem key={i} className="pl-2 basis-1/3">
+                          <Skeleton className="w-32 h-32 rounded" />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-0" />
+                    <CarouselNext className="right-0" />
+                  </Carousel>
+                </TabsContent>
+              </>
+            ) : (
+              combinations.map((combination) => (
+                <TabsContent
+                  key={combination.key}
+                  value={combination.key}
+                  className="mt-2"
+                >
+                  <Carousel className="w-full relative">
+                    <CarouselContent className="-ml-2">
+                      {combination.items.map((item) => (
+                        <CarouselItem
+                          key={item.objectID}
+                          className="pl-2 basis-1/3 flex items-center justify-center"
+                        >
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="w-32 h-32 rounded object-contain object-center bg-white"
+                          />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-0" />
+                    <CarouselNext className="right-0" />
+                  </Carousel>
+                </TabsContent>
+              ))
+            )
+          ) : null}
+        </Tabs>
 
         <AlgoliaLogo />
       </section>

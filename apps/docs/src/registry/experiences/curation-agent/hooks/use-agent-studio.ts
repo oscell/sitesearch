@@ -66,7 +66,6 @@ export function useAgentStudio(config: AgentStudioConfig) {
 
   const chat = useChat({
     transport,
-    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     async onToolCall({ toolCall }) {
       // Handle client-side tools here if you define any on the agent.
       console.log('toolCall', toolCall);

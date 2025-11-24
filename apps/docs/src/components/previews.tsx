@@ -285,7 +285,7 @@ export function PreviewCurationAgent() {
         <div className="w-full max-w-3xl">
           <CurationAgent
             applicationId="CCZC5HO11D"
-            apiKey="84cbfc5e6c70757b7616e57cf0eba535"
+            apiKey="eaf19d39d027fc0064273050813d6eb0"
             agentId="e9d7a2bb-8e10-4168-a6a7-6c2a2d3e8ddd"
           />
           <p className="mt-2 text-right text-xs opacity-60">
