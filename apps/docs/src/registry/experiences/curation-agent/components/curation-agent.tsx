@@ -136,13 +136,13 @@ export function CurationAgent({
       if (message.role === "assistant" && message.parts) {
         message.parts.forEach((part, partIndex) => {
           if (
-            (part as any).type === "tool-compose-combination" &&
+            (part as any).type === "tool-compose-combinations" &&
             (part as any).state === "output-available" &&
             (part as any).output
           ) {
             const input = (part as any).input as unknown as ToolCallInput;
-            if (input.items && input.items.length > 0) {
-              input.items.forEach((group, groupIndex) => {
+            if (input.combinations && input.combinations.length > 0) {
+              input.combinations.forEach((group, groupIndex) => {
                 if (group.items && group.items.length > 0) {
                   allCombinations.push({
                     key: `${

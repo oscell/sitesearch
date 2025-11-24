@@ -28,7 +28,7 @@ export type ToolCallInput = {
 
 export type ToolCallOutput = {
   status: 'Successfully composed combination stop';
-  combinations: {
+  combination: {
     items: ItemGroup[];
   };
 };
@@ -75,13 +75,14 @@ export function useAgentStudio(config: AgentStudioConfig) {
       if (toolCall.toolName === 'compose-combinations') {
         // toolCall.input is ToolCallInput which has { items: ItemGroup[] }
         // Each ItemGroup has { title: string, items: Item[] }
+        console.log('toolCall.input', toolCall);
         const input = toolCall.input as ToolCallInput;
         chat.addToolOutput({
           tool: 'compose-combinations',
           toolCallId: toolCall.toolCallId,
           output: { 
             status: 'Successfully composed combination stop', 
-            combinations: { items: input.combinations || [] }
+            combination: { items: input.combinations || [] }
           },
         });
       }
