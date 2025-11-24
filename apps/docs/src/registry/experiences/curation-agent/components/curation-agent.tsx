@@ -114,10 +114,10 @@ export function CurationAgent({
 
   // STATIC subject – does not change
   const subject = React.useRef({
-    objectID: "3401495000",
-    title: "Floral-Print Ball Skirt",
+    objectID: "M0E20000000EEWD",
+    title: "T-Shirt Majestic Filatures beige-white",
     image:
-      "https://medias.carolinaherrera.com/medias/sys_master/images/h90/hb1/10398847664158/10398847598622/10398847598622.jpg",
+      "https://fxqklbpngldowtbkqezm.supabase.co/storage/v1/object/public/assets-flagship-fashion/M0E20000000EEWD_0.jpg",
   }).current;
 
   // Collect all combinations from all assistant messages
